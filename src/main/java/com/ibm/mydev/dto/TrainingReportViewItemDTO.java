@@ -1,22 +1,22 @@
 package com.ibm.mydev.dto;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class TrainingReportViewItemDTO {
 
-    @SerializedName("lo_title")
+    @JsonProperty("lo_title")
     private String title;
 
-    @SerializedName("lo_start_dt")
+    @JsonProperty("lo_start_dt")
     private String startDate;
 
-    @SerializedName("lo_end_dt")
+    @JsonProperty("lo_end_dt")
     private String endDate;
 
-    @SerializedName("lo_object_type")
+    @JsonProperty("lo_object_type")
     private String category;
 
-    @SerializedName("lo_hours")
+    @JsonProperty("lo_hours")
     private Integer hours;
 
     public String getTitle() {

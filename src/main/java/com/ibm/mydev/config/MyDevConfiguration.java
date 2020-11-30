@@ -1,12 +1,10 @@
 package com.ibm.mydev.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.http.HttpHeaders;
 
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 @Configuration
@@ -34,23 +32,14 @@ public class MyDevConfiguration {
     public String users;
 
     @Bean
-    public URL getBaseUrl() throws Exception {
-        return new URL(baseUrl);
+    @Qualifier("baseUrl")
+    public String getBaseUrl() throws Exception {
+        return baseUrl;
     }
 
     @Bean
-    public URL getAuthUrl() throws Exception {
-        return new URL(getBaseUrl(), authentication);
-    }
-
-    @Bean
-    public HttpURLConnection getAccessTokenURLConnection() throws Exception {
-        HttpURLConnection httpConnection = (HttpURLConnection) getAuthUrl().openConnection();
-        httpConnection.setUseCaches(false);
-        httpConnection.setRequestMethod("POST");
-        httpConnection.setRequestProperty(HttpHeaders.ACCEPT, "application/json");
-        httpConnection.setDoOutput(true);
-        httpConnection.setDoInput(true);
-        return httpConnection;
+    @Qualifier("authenticationUrl")
+    public URL getAuthURL() throws Exception {
+        return new URL(new URL(getBaseUrl()), authentication);
     }
 }
