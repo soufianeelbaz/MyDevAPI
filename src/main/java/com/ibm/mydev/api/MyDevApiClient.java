@@ -2,7 +2,7 @@ package com.ibm.mydev.api;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.ibm.mydev.config.MyDevConfiguration;
+import com.ibm.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.dto.TranscriptReportViewPayloadDTO;
 import com.ibm.mydev.dto.UserReportViewPayloadDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 @Service
 public class MyDevApiClient {
 
+    public static final String AUTHORIZATION_KEY = "Authorization";
+
     private static final String PARAM_FILTER = "$filter";
     private static final String PARAM_SELECT = "$select";
 
@@ -31,19 +33,7 @@ public class MyDevApiClient {
     private static final String FILTER_LESS_THAN = " lt ";
     private static final String AND = " and ";
 
-    @Autowired
-    public MyDevConfiguration apiConfiguration;
-
-    @Autowired
-    @Qualifier("baseUrl")
-    public String baseUrl;
-
-    @Autowired
-    @Qualifier("authenticationUrl")
-    public URL authenticationUrl;
-
     private static final String ACCEPT = "Accept";
-    private static final String AUTHORIZATION_KEY = "Authorization";
     private static final String PREFER = "prefer";
 
     private static final String SCOPE = "all";
@@ -53,51 +43,49 @@ public class MyDevApiClient {
     private static final String CLIENT_ID_KEY = "clientId";
     private static final String CLIENT_SECRET_KEY = "clientSecret";
 
+    @Autowired
+    public MyDevApiConfiguration apiConfiguration;
 
-    private HttpURLConnection getPayloadHttpConnection(URL url) throws Exception {
-        HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
-        httpConnection.setReadTimeout(0);
-        httpConnection.setUseCaches(false);
-        httpConnection.setRequestMethod("GET");
-        httpConnection.setRequestProperty(HttpHeaders.ACCEPT, "application/json");
-        httpConnection.setDoOutput(false);
-        httpConnection.setDoInput(true);
-        addHeadersToRequest(getAuthRequestHeaders(), httpConnection);
-        return httpConnection;
-    }
+    @Autowired
+    @Qualifier("MyDevRestTemplate")
+    public RestTemplate restTemplate;
+
+    @Autowired
+    @Qualifier("baseUrl")
+    public String baseUrl;
+
+    @Autowired
+    @Qualifier("authenticationUrl")
+    public URL authenticationUrl;
+
 
     public <T> ResponseEntity<T> query(String url, HttpEntity request, Class<T> clazz) {
-        RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.GET, request, clazz);
-        return response;
+        return restTemplate.exchange(url, HttpMethod.GET, request, clazz);
     }
 
     public ResponseEntity<UserReportViewPayloadDTO> getUserData(String uid) throws Exception {
-        String accessToken = getAccessToken();
-        HttpHeaders headers = getHeaders(accessToken);
+        HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
         String urlWithParams = getUsersEndpointUri(uid);
         return query(urlWithParams, request, UserReportViewPayloadDTO.class);
     }
 
     public ResponseEntity<TranscriptReportViewPayloadDTO> getTranscriptData(Long id, Integer year) throws Exception {
-        String accessToken = getAccessToken();
-        HttpHeaders headers = getHeaders(accessToken);
+        HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
         String urlWithParams = getTranscriptsEndpointUri(id, year);
         return query(urlWithParams, request, TranscriptReportViewPayloadDTO.class);
     }
 
-    private HttpHeaders getHeaders(String accessToken) {
+    private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, "application/json");
-        headers.set(AUTHORIZATION_KEY, getAuthorizationHeaderValue(accessToken));
+        headers.set(AUTHORIZATION_KEY, "Bearer WRONG_TOKEN");
         return headers;
     }
 
     private String getUsersEndpointUri(String uid) {
-        String url = apiConfiguration.baseUrl + apiConfiguration.users;
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.users)
                 .queryParam(PARAM_FILTER, buildUserFilterParams(uid))
                 .queryParam(PARAM_SELECT, Arrays.stream(UserReportAttributes.values())
                         .map(attr -> attr.getAttribute())
@@ -116,8 +104,7 @@ public class MyDevApiClient {
     }
 
     private String getTranscriptsEndpointUri(Long id, Integer year) {
-        String url = apiConfiguration.baseUrl + apiConfiguration.transcripts;
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.transcripts)
                 .queryParam(PARAM_FILTER, buildTranscriptFilterParams(id, year))
                 .queryParam(PARAM_SELECT, Arrays.stream(TranscriptReportAttributes.values())
                         .map(attr -> attr.getAttribute())
@@ -139,93 +126,6 @@ public class MyDevApiClient {
         sb.append(FILTER_EQUAL);
         sb.append(id);
         return sb.toString();
-    }
-    private List<Header> getAuthRequestHeaders() {
-        List<Header> headers = new ArrayList<Header>();
-        headers.add(new Header("cache-control", "no-cache"));
-        return headers;
-    }
-
-    private List<RequestParameter> getAuthenticationRequestParams() {
-        List<RequestParameter> requestParameters = new ArrayList<RequestParameter>();
-        requestParameters.add(new RequestParameter(CLIENT_ID_KEY, apiConfiguration.clientId));
-        requestParameters.add(new RequestParameter(CLIENT_SECRET_KEY, apiConfiguration.password));
-        requestParameters.add(new RequestParameter(GRANT_TYPE_KEY, GRANT_TYPE));
-        requestParameters.add(new RequestParameter(SCOPE_KEY, SCOPE));
-        return requestParameters;
-    }
-
-    private HttpURLConnection getAuthenticationHttpConnection() throws Exception {
-        HttpURLConnection httpConnection = (HttpURLConnection) authenticationUrl.openConnection();
-        httpConnection.setUseCaches(false);
-        httpConnection.setRequestMethod("POST");
-        httpConnection.setRequestProperty(HttpHeaders.ACCEPT, "application/json");
-        httpConnection.setDoOutput(true);
-        httpConnection.setDoInput(true);
-        addHeadersToRequest(getAuthRequestHeaders(), httpConnection);
-        return httpConnection;
-    }
-
-    public synchronized String getAccessToken() throws Exception {
-        HttpURLConnection connection = getAuthenticationHttpConnection();
-        OutputStream outputStream = connection.getOutputStream();
-        String requestBody = buildRequestBody(getAuthenticationRequestParams());
-        outputStream.write(requestBody.getBytes());
-        outputStream.flush();
-        outputStream.close();
-        if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-            String content = readConnectionInput(connection);
-            JsonObject contentObject = new JsonParser().parse(content).getAsJsonObject();
-            return contentObject.get("access_token").getAsString();
-        }
-        throw new Exception(String.format("Response by URL '%s' is '%s' '%s'.", null, connection.getResponseCode(),
-                connection.getResponseMessage()));
-    }
-
-    private static String readConnectionInput(HttpURLConnection httpConnection) throws IOException {
-        try (InputStreamReader inputStream = new InputStreamReader(httpConnection.getInputStream())) {
-            BufferedReader reader = new BufferedReader(inputStream);
-
-            String responseString;
-            StringWriter writer = new StringWriter();
-            while ((responseString = reader.readLine()) != null) {
-                writer.write(responseString);
-            }
-
-            return writer.toString();
-        }
-    }
-
-    private  String getAuthorizationHeaderValue(String accessToken) {
-        return "Bearer " + accessToken;
-    }
-
-    private void addHeadersToRequest(List<Header> headers, HttpURLConnection httpConnection) {
-        for (Header header : headers) {
-            httpConnection.setRequestProperty(header.name, header.value);
-        }
-    }
-
-    private String buildRequestBody(List<RequestParameter> requestParameters) {
-        StringBuilder reqbody =new StringBuilder();
-        Integer max=0;
-        reqbody.append("{");
-        for (RequestParameter requestParameter : requestParameters) {
-            reqbody.append('"');
-            reqbody.append(requestParameter.name);
-            reqbody.append('"');
-            reqbody.append(':');
-            reqbody.append('"');
-            reqbody.append(requestParameter.value);
-            reqbody.append('"');
-            if(max < requestParameters.size()-1)
-            {
-                reqbody.append(",");
-            }
-            max++;
-        }
-        reqbody.append("}");
-        return reqbody.toString();
     }
 
 }
