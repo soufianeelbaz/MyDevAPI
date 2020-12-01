@@ -27,20 +27,18 @@ public class MyDevApiClient {
 
     private static final String SINGLE_QUOTE = "'";
 
+    private static final String FILTER_EQUAL = " eq ";
     private static final String FILTER_TRANSCRIPT_QUERY = "transc_user_id eq $TRANSC_USER_ID " +
             "and is_removed eq false " +
             "and is_standalone eq true " +
             "and (((user_lo_status_group_id eq 12 or user_lo_status_group_id eq 13) and is_archive eq 0) " +
             "or (user_lo_status_group_id eq 11 and user_lo_comp_dt ge cast('$YEAR', Edm.DateTimeOffset)))";
 
-    private static final String FILTER_EQUAL = " eq ";
-    private static final String FILTER_GREATER_THAN_OR_EQUAL = " ge ";
-    private static final String FILTER_LESS_THAN = " lt ";
-    private static final String AND = " and ";
-    private static final String OR = " or ";
-    public static final String FALSE = "false";
-    public static final String OPENING_PARENTHESE = "(";
-    public static final String CLOSING_PARENTHESE = ")";
+    private static final String OPERATOR_AND = " and ";
+    private static final String OPERATOR_OR = " or ";
+
+    private static final String OPENING_PARENTHESE = "(";
+    private static final String CLOSING_PARENTHESE = ")";
 
     @Autowired
     public MyDevApiConfiguration apiConfiguration;
@@ -150,13 +148,13 @@ public class MyDevApiClient {
         sb.append(TrainingLocalReportAttributes.TRAINING_TITLE_LOCAL_CULTURE_ID.getAttribute());
         sb.append(FILTER_EQUAL);
         sb.append(cultureId);
-        sb.append(AND);
+        sb.append(OPERATOR_AND);
         sb.append(buildInObjectIdsFilter(objectIds));
         return sb.toString();
     }
 
     private String buildInObjectIdsFilter(List<String> objectIds) {
-        String filters = objectIds.stream().map(objectId -> TrainingLocalReportAttributes.TRAINING_TITLE_LOCAL_OBJECT_ID.getAttribute() + FILTER_EQUAL + objectId).collect(Collectors.joining(OR));
+        String filters = objectIds.stream().map(objectId -> TrainingLocalReportAttributes.TRAINING_TITLE_LOCAL_OBJECT_ID.getAttribute() + FILTER_EQUAL + objectId).collect(Collectors.joining(OPERATOR_OR));
         return OPENING_PARENTHESE + filters + CLOSING_PARENTHESE;
     }
 }
