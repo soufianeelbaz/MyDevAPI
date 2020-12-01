@@ -2,7 +2,6 @@ package com.ibm.mydev.api.token;
 
 import com.ibm.mydev.api.configuration.MyDevApiConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;

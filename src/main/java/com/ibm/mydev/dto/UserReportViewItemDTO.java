@@ -40,5 +40,21 @@ public class UserReportViewItemDTO {
         this.languageId = languageId;
     }
 
+    public enum UserReportAttributes {
+
+        USER_REFERENCE("user_ref"),
+        USER_ID("user_id"),
+        USER_LANGUAGE_ID("user_language_id");
+
+        private String attribute;
+
+        UserReportAttributes(String attribute) {
+            this.attribute = attribute;
+        }
+
+        public String getAttribute() {
+            return attribute;
+        }
+    }
 }
 

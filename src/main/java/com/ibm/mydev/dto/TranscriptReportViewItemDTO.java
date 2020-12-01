@@ -123,4 +123,30 @@ public class TranscriptReportViewItemDTO {
     public void setTrainingPurpose(Integer trainingPurpose) {
         this.trainingPurpose = trainingPurpose;
     }
+
+    public enum TranscriptReportAttributes {
+
+        TRANSC_OBJECT_ID("transc_object_id"),
+        USER_LO_STATUS_GROUP_ID("user_lo_status_group_id"),
+        IS_LATEST_REG_NUM("is_latest_reg_num"),
+        IS_ARCHIVE("is_archive"),
+        IS_REMOVED("is_removed"),
+        IS_STANDALONE("is_standalone"),
+        USER_LO_REG_DT("user_lo_reg_dt"),
+        USER_LO_MIN_DUE_DATE("user_lo_min_due_date"),
+        USER_LO_COMP_DT("user_lo_comp_dt"),
+        TRAINING_PURPOSE("training_purpose"),
+        TRANSC_USER_ID("transc_user_id"),
+        USER_LO_ASSIGNED_DT("user_lo_assigned_dt");
+
+        private String attribute;
+
+        TranscriptReportAttributes(String attribute) {
+            this.attribute = attribute;
+        }
+
+        public String getAttribute() {
+            return attribute;
+        }
+    }
 }

@@ -25,17 +25,17 @@ public class MyDevApiConfiguration {
     @Value("${mydev.csod.api.credentials.clientId}")
     public String clientId;
 
-    @Value("${mydev.csod.api.credentials.password}")
+    @Value("${mydev.csod.api.credentials.clientSecret}")
     public String clientSecret;
-
-    @Value("${mydev.csod.api.credentials.password}")
-    public String password;
 
     @Value("${mydev.csod.api.endpoints.auth}")
     public String authentication;
 
     @Value("${mydev.csod.api.endpoints.trainings}")
     public String trainings;
+
+    @Value("${mydev.csod.api.endpoints.trainingsLocal}")
+    public String trainingsLocal;
 
     @Value("${mydev.csod.api.endpoints.transcripts}")
     public String transcripts;
