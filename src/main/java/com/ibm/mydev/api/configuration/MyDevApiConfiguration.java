@@ -1,7 +1,6 @@
 package com.ibm.mydev.api.configuration;
 
-import com.ibm.mydev.api.interceptor.MyDevClientHttpOAuthInterceptor;
-import com.ibm.mydev.api.token.MyDevTokenService;
+import com.ibm.mydev.api.connected.interceptor.MyDevClientHttpOAuthInterceptor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -11,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
+import com.ibm.mydev.api.token.MyDevTokenService;
 
 import java.net.URL;
 import java.util.ArrayList;

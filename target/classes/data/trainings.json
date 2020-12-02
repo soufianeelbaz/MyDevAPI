@@ -1,0 +1,12 @@
+{
+  "value": [
+    {
+      "title": "Travailler ma mobilité",
+      "startDate": null,
+      "endDate": null,
+      "category": "EVNT",
+      "hours": 21
+    }
+  ],
+  "context": "https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_training"
+}

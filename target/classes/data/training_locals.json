@@ -1,0 +1,20 @@
+{
+  "value": [
+    {
+      "objectId": "2d3ece83-532d-4219-be54-e80a273bb67a",
+      "title": "EN",
+      "cultureId": 1
+    },
+    {
+      "objectId": "150056f6-7b54-40f8-bcc9-646a06ddf0af",
+      "title": "Launch course",
+      "cultureId": 1
+    },
+    {
+      "objectId": "1f5cb93b-cc7a-41b3-9ccf-852574fd4fe1",
+      "title": null,
+      "cultureId": 1
+    }
+  ],
+  "context": "https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_training_title_local"
+}
