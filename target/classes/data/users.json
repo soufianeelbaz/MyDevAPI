@@ -1,10 +1,10 @@
 {
+  "@odata.context": "https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_user",
   "value": [
     {
-      "id": -5,
-      "collaborator": "CSODSoapAdmin",
-      "languageId": null
+      "user_ref": "CSODSoapAdmin",
+      "user_id": -5,
+      "user_language_id": null
     }
-  ],
-  "context": "https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_user"
+  ]
 }

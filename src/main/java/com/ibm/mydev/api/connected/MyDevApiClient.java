@@ -19,6 +19,7 @@ import com.ibm.mydev.dto.TranscriptItem.TranscriptReportAttributes;
 import com.ibm.mydev.dto.TrainingItem.TrainingReportAttributes;
 import com.ibm.mydev.dto.TrainingLocalItem.TrainingLocalReportAttributes;
 
+@Profile("!MYDEV_MOCK")
 @Service
 public class MyDevApiClient implements IMyDevApiClient {
 
@@ -67,14 +68,15 @@ public class MyDevApiClient implements IMyDevApiClient {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
         String urlWithParams = getTranscriptsEndpointUri(id, year);
-        return query(urlWithParams, request, MyDevTranscriptView.class);
+        MyDevTranscriptView view = query(urlWithParams, request, MyDevTranscriptView.class);
+        return view;
     }
 
     @Override
-    public MyDevTrainingView getTrainingData(String objectId) {
+    public MyDevTrainingView getTrainingData(List<String> objectIds) {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
-        String urlWithParams = getTrainingsEndpointUri(objectId);
+        String urlWithParams = getTrainingsEndpointUri(objectIds);
         return query(urlWithParams, request, MyDevTrainingView.class);
     }
 
@@ -128,20 +130,21 @@ public class MyDevApiClient implements IMyDevApiClient {
         // "%s" todo
     }
 
-    private String getTrainingsEndpointUri(String objectId) {
+    private String getTrainingsEndpointUri(List<String> objectIds) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.trainings)
-                .queryParam(PARAM_FILTER, buildTrainingFilterParams(objectId))
+                .queryParam(PARAM_FILTER, buildTrainingFilterParams(objectIds))
                 .queryParam(PARAM_SELECT, Arrays.stream(TrainingReportAttributes.values())
                         .map(attr -> attr.getAttribute())
                         .collect(Collectors.joining(",")));
         return builder.toUriString();
     }
 
-    private String buildTrainingFilterParams(String objectId) {
+    private String buildTrainingFilterParams(List<String> objectIds) {
         StringBuilder sb = new StringBuilder();
-        sb.append(TrainingReportAttributes.OBJECT_ID.getAttribute());
-        sb.append(FILTER_EQUAL);
-        sb.append(objectId);
+        sb.append(OPENING_PARENTHESE);
+        sb.append(objectIds.stream().map(id -> TranscriptReportAttributes.TRANSC_OBJECT_ID.getAttribute() + FILTER_EQUAL + id)
+                .collect(Collectors.joining(OPERATOR_OR)));
+        sb.append(CLOSING_PARENTHESE);
         return sb.toString();
     }
 

@@ -13,7 +13,7 @@ public interface IMyDevApiClient {
 
     MyDevTranscriptView getTranscriptData(Long id, Integer year);
 
-    MyDevTrainingView getTrainingData(String objectId);
+    MyDevTrainingView getTrainingData(List<String> objectId);
 
     MyDevTrainingLocalView getTrainingLocalData(Long cultureId, List<String> objectIds);
 

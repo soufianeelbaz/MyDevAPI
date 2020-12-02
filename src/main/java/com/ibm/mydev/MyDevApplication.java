@@ -1,7 +1,6 @@
 package com.ibm.mydev;
 
 import com.ibm.mydev.api.IMyDevApiClient;
-import com.ibm.mydev.api.connected.MyDevApiClient;
 import com.ibm.mydev.dto.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -15,7 +14,7 @@ import java.util.Arrays;
 public class MyDevApplication {
 
     @Autowired
-    public MyDevApiClient myDevApiClient;
+    public IMyDevApiClient myDevApiClient;
 
     public static void main(String[] args) {
         SpringApplication.run(MyDevApplication.class, args);
@@ -35,11 +34,11 @@ public class MyDevApplication {
         return myDevApiClient.getTranscriptData(userId, year);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/training/{objectId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/training")
     @ResponseBody
-    public MyDevTrainingView trainings(@PathVariable("objectId") String objectId) throws Exception {
+    public MyDevTrainingView trainings() throws Exception {
 
-        return myDevApiClient.getTrainingData(objectId);
+        return myDevApiClient.getTrainingData(Arrays.asList("2d3ece83-532d-4219-be54-e80a273bb67a", "150056f6-7b54-40f8-bcc9-646a06ddf0af", "1f5cb93b-cc7a-41b3-9ccf-852574fd4fe1"));
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/training/local/{cultureId}")

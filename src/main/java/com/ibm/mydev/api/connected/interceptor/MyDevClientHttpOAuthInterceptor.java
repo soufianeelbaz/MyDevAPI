@@ -1,14 +1,13 @@
 package com.ibm.mydev.api.connected.interceptor;
 
+import com.ibm.mydev.api.connected.token.MyDevTokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import com.ibm.mydev.api.token.MyDevTokenService;
 
 import java.io.IOException;
 

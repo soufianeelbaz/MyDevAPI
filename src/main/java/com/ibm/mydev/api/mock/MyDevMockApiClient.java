@@ -1,5 +1,6 @@
 package com.ibm.mydev.api.mock;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.mydev.api.IMyDevApiClient;
 import com.ibm.mydev.dto.MyDevTrainingLocalView;
 import com.ibm.mydev.dto.MyDevTrainingView;
@@ -10,9 +11,10 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
-@Profile("dev")
+@Profile("MYDEV_MOCK")
 @Service
 public class MyDevMockApiClient implements IMyDevApiClient {
 
@@ -30,22 +32,30 @@ public class MyDevMockApiClient implements IMyDevApiClient {
 
     @Override
     public MyDevUserView getUserData(String uid) {
-        return null;
+        return unmarshall(users, MyDevUserView.class);
     }
 
     @Override
     public MyDevTranscriptView getTranscriptData(Long id, Integer year) {
-        return null;
+        return unmarshall(transcripts, MyDevTranscriptView.class);
     }
 
     @Override
-    public MyDevTrainingView getTrainingData(String objectId) {
-        return null;
+    public MyDevTrainingView getTrainingData(List<String> objectId) {
+        return unmarshall(trainings, MyDevTrainingView.class);
     }
 
     @Override
     public MyDevTrainingLocalView getTrainingLocalData(Long cultureId, List<String> objectIds) {
-        return null;
+        return unmarshall(trainingLocals, MyDevTrainingLocalView.class);
     }
 
+    private <T> T unmarshall(Resource resource, Class<T> clazz) {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue(resource.getFile(), clazz);
+        } catch (IOException e) {
+            return null;
+        }
+    }
 }

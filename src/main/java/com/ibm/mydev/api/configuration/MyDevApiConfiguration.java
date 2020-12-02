@@ -1,21 +1,23 @@
 package com.ibm.mydev.api.configuration;
 
 import com.ibm.mydev.api.connected.interceptor.MyDevClientHttpOAuthInterceptor;
+import com.ibm.mydev.api.connected.token.MyDevTokenRequestBody;
+import com.ibm.mydev.api.connected.token.MyDevTokenService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.client.RestTemplate;
-import com.ibm.mydev.api.token.MyDevTokenService;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+@Profile("!MYDEV_MOCK")
 @Configuration
 public class MyDevApiConfiguration {
 
@@ -47,18 +49,6 @@ public class MyDevApiConfiguration {
     public int timeout;
 
     @Bean
-    @Qualifier("baseUrl")
-    public String getBaseUrl() throws Exception {
-        return baseUrl;
-    }
-
-    @Bean
-    @Qualifier("authenticationUrl")
-    public URL getAuthURL() throws Exception {
-        return new URL(new URL(getBaseUrl()), authentication);
-    }
-
-    @Bean
     public RestTemplateCustomizer customRestTemplateCustomizer() {
         return new MyDevRestTemplateCustomizer();
     }
@@ -69,9 +59,18 @@ public class MyDevApiConfiguration {
         return new RestTemplate();
     }
 
+    private MyDevTokenRequestBody getAuthRequestBody() {
+        MyDevTokenRequestBody body = new MyDevTokenRequestBody();
+        body.setClientId(clientId);
+        body.setClientSecret(clientSecret);
+        body.setGrantType("client_credentials");
+        body.setScope("all");
+        return body;
+    }
+
     @Bean
     public MyDevTokenService myDevTokenService() {
-        return new MyDevTokenService(myDevOAuthRestTemplate());
+        return new MyDevTokenService(myDevOAuthRestTemplate(), baseUrl + authentication , getAuthRequestBody());
     }
 
     @Bean
