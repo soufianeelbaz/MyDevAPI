@@ -181,5 +181,5 @@
       "training_title_local_culture_id": 2
     }
   ],
-  "context": "https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_training_title_local"
+  "@odata.context": "https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_training_title_local"
 }
