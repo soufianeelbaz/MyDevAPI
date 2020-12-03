@@ -48,6 +48,9 @@ public class MyDevApiConfiguration {
     @Value("${mydev.csod.api.timeout:30}")
     public int timeout;
 
+    @Value("${mydev.csod.api.chunk.url.size}")
+    public int chunkUrlSize;
+
     @Bean
     public RestTemplateCustomizer customRestTemplateCustomizer() {
         return new MyDevRestTemplateCustomizer();

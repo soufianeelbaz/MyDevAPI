@@ -37,6 +37,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     private static final String FILTER_TRANSCRIPT_QUERY = "transc_user_id eq $TRANSC_USER_ID " +
             "and is_removed eq false " +
             "and is_standalone eq true " +
+            "and is_latest_reg_num eq 1 " +
             "and (((user_lo_status_group_id eq 12 or user_lo_status_group_id eq 13) and is_archive eq 0) " +
             "or (user_lo_status_group_id eq 11 and user_lo_comp_dt ge cast('$YEAR', Edm.DateTimeOffset)))";
 
@@ -45,8 +46,6 @@ public class MyDevApiClient implements IMyDevApiClient {
 
     private static final String OPENING_PARENTHESE = "(";
     private static final String CLOSING_PARENTHESE = ")";
-
-    private static final int PARTITION_SIZE = 20;
 
     @Autowired
     public MyDevApiConfiguration apiConfiguration;
@@ -64,7 +63,6 @@ public class MyDevApiClient implements IMyDevApiClient {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
         String urlWithParams = getUsersEndpointUri(uid);
-        // MyDevUser todo
         return query(urlWithParams, request, MyDevUserView.class);
     }
 
@@ -82,7 +80,7 @@ public class MyDevApiClient implements IMyDevApiClient {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
 
-        List<List<String>> partObjectIds = Lists.partition(objectIds, PARTITION_SIZE);
+        List<List<String>> partObjectIds = Lists.partition(objectIds, apiConfiguration.chunkUrlSize);
         MyDevTrainingView myDevTrainingView = new MyDevTrainingView();
         partObjectIds.forEach(objIds -> {
             String urlWithParams = getTrainingsEndpointUri(objIds);
@@ -99,7 +97,7 @@ public class MyDevApiClient implements IMyDevApiClient {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
 
-        List<List<String>> partObjectIds = Lists.partition(objectIds, PARTITION_SIZE);
+        List<List<String>> partObjectIds = Lists.partition(objectIds, apiConfiguration.chunkUrlSize);
         MyDevTrainingLocalView myDevTrainingLocalView = new MyDevTrainingLocalView();
         partObjectIds.forEach(objIds -> {
             String urlWithParams = getTrainingsLocalEndpointUri(cultureId, objIds);
