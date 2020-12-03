@@ -24,6 +24,18 @@ public class TranscriptItem {
 
     private Integer trainingPurpose;
 
+    private Long userId;
+
+    @JsonProperty("userId")
+    public Long getUserId() {
+        return userId;
+    }
+
+    @JsonProperty("transc_user_id")
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @JsonProperty("trainingId")
     public String getTrainingId() {
         return trainingId;
@@ -136,8 +148,7 @@ public class TranscriptItem {
         USER_LO_MIN_DUE_DATE("user_lo_min_due_date"),
         USER_LO_COMP_DT("user_lo_comp_dt"),
         TRAINING_PURPOSE("training_purpose"),
-        TRANSC_USER_ID("transc_user_id"),
-        USER_LO_ASSIGNED_DT("user_lo_assigned_dt");
+        TRANSC_USER_ID("transc_user_id");
 
         private String attribute;
 
