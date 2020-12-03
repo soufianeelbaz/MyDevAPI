@@ -1,23 +1,26 @@
 package com.ibm.mydev.api.connected;
 
+import com.google.common.collect.Lists;
 import com.ibm.mydev.api.IMyDevApiClient;
 import com.ibm.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.dto.*;
+import com.ibm.mydev.dto.TrainingItem.TrainingReportAttributes;
+import com.ibm.mydev.dto.TrainingLocalItem.TrainingLocalReportAttributes;
+import com.ibm.mydev.dto.TranscriptItem.TranscriptReportAttributes;
+import com.ibm.mydev.dto.UserItem.UserReportAttributes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
-
-import com.ibm.mydev.dto.UserItem.UserReportAttributes;
-import com.ibm.mydev.dto.TranscriptItem.TranscriptReportAttributes;
-import com.ibm.mydev.dto.TrainingItem.TrainingReportAttributes;
-import com.ibm.mydev.dto.TrainingLocalItem.TrainingLocalReportAttributes;
 
 @Profile("!MYDEV_MOCK")
 @Service
@@ -42,6 +45,8 @@ public class MyDevApiClient implements IMyDevApiClient {
 
     private static final String OPENING_PARENTHESE = "(";
     private static final String CLOSING_PARENTHESE = ")";
+
+    private static final int PARTITION_SIZE = 20;
 
     @Autowired
     public MyDevApiConfiguration apiConfiguration;
@@ -76,16 +81,34 @@ public class MyDevApiClient implements IMyDevApiClient {
     public MyDevTrainingView getTrainingData(List<String> objectIds) {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
-        String urlWithParams = getTrainingsEndpointUri(objectIds);
-        return query(urlWithParams, request, MyDevTrainingView.class);
+
+        List<List<String>> partObjectIds = Lists.partition(objectIds, PARTITION_SIZE);
+        MyDevTrainingView myDevTrainingView = new MyDevTrainingView();
+        partObjectIds.forEach(objIds -> {
+            String urlWithParams = getTrainingsEndpointUri(objIds);
+            MyDevTrainingView myDevTrainingViewTemp = query(urlWithParams, request, MyDevTrainingView.class);
+            myDevTrainingView.setContext(myDevTrainingViewTemp.getContext());
+            myDevTrainingView.getValue().addAll(myDevTrainingViewTemp.getValue());
+        });
+
+        return myDevTrainingView;
     }
 
     @Override
     public MyDevTrainingLocalView getTrainingLocalData(Long cultureId, List<String> objectIds) {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
-        String urlWithParams = getTrainingsLocalEndpointUri(cultureId, objectIds);
-        return query(urlWithParams, request, MyDevTrainingLocalView.class);
+
+        List<List<String>> partObjectIds = Lists.partition(objectIds, PARTITION_SIZE);
+        MyDevTrainingLocalView myDevTrainingLocalView = new MyDevTrainingLocalView();
+        partObjectIds.forEach(objIds -> {
+            String urlWithParams = getTrainingsLocalEndpointUri(cultureId, objIds);
+            MyDevTrainingLocalView myDevTrainingLocalViewTemp = query(urlWithParams, request, MyDevTrainingLocalView.class);
+            myDevTrainingLocalView.setContext(myDevTrainingLocalViewTemp.getContext());
+            myDevTrainingLocalView.getValue().addAll(myDevTrainingLocalViewTemp.getValue());
+        });
+
+        return myDevTrainingLocalView;
     }
 
     private HttpHeaders getHeaders() {
@@ -142,7 +165,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     private String buildTrainingFilterParams(List<String> objectIds) {
         StringBuilder sb = new StringBuilder();
         sb.append(OPENING_PARENTHESE);
-        sb.append(objectIds.stream().map(id -> TranscriptReportAttributes.TRANSC_OBJECT_ID.getAttribute() + FILTER_EQUAL + id)
+        sb.append(objectIds.stream().map(id -> TrainingReportAttributes.OBJECT_ID.getAttribute() + FILTER_EQUAL + id)
                 .collect(Collectors.joining(OPERATOR_OR)));
         sb.append(CLOSING_PARENTHESE);
         return sb.toString();
