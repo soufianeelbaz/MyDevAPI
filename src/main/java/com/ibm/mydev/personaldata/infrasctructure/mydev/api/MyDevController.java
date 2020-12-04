@@ -28,7 +28,7 @@ public class MyDevController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/transcript/{userId}/{year}")
     @ResponseBody
-    public MyDevTranscriptView users(@PathVariable("userId") Long userId,
+    public MyDevTranscriptView users(@PathVariable("userId") Integer userId,
                                      @PathVariable("year") Integer year) throws Exception {
         return myDevApiClient.getTranscriptData(userId, year);
     }
@@ -41,7 +41,7 @@ public class MyDevController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/training/local/{cultureId}")
     @ResponseBody
-    public MyDevTrainingLocalView trainingsLocal(@PathVariable("cultureId") Long cultureId) throws Exception {
+    public MyDevTrainingLocalView trainingsLocal(@PathVariable("cultureId") Integer cultureId) throws Exception {
 
         return myDevApiClient.getTrainingLocalData(cultureId, objectIds);
     }

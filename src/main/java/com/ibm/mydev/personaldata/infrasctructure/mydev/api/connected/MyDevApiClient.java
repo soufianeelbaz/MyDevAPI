@@ -1,6 +1,7 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected;
 
 import com.google.common.collect.Lists;
+import com.ibm.mydev.personaldata.domain.developmentactions.DevelopmentAction;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.IMyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -67,7 +69,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     @Override
-    public MyDevTranscriptView getTranscriptData(Long id, Integer year) {
+    public MyDevTranscriptView getTranscriptData(Integer id, Integer year) {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
         String urlWithParams = getTranscriptsEndpointUri(id, year);
@@ -93,7 +95,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     @Override
-    public MyDevTrainingLocalView getTrainingLocalData(Long cultureId, List<String> objectIds) {
+    public MyDevTrainingLocalView getTrainingLocalData(Integer cultureId, List<String> objectIds) {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
 
@@ -107,6 +109,15 @@ public class MyDevApiClient implements IMyDevApiClient {
         });
 
         return myDevTrainingLocalView;
+    }
+
+    @Override
+    public List<DevelopmentAction> buildDevelopmentActions(MyDevUserView userView, MyDevTranscriptView transcriptView, MyDevTrainingView trainingView, MyDevTrainingLocalView trainingLocalView) {
+        List<DevelopmentAction> developmentActions = new ArrayList<>();
+        DevelopmentAction developmentAction = new DevelopmentAction();
+        developmentAction.setSource(userView.getValue().get(0).getCollaborator());
+        developmentActions.add(developmentAction);
+        return developmentActions;
     }
 
     private HttpHeaders getHeaders() {
@@ -135,7 +146,7 @@ public class MyDevApiClient implements IMyDevApiClient {
         return sb.toString();
     }
 
-    private String getTranscriptsEndpointUri(Long id, Integer year) {
+    private String getTranscriptsEndpointUri(Integer id, Integer year) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.transcripts)
                 .queryParam(PARAM_FILTER, buildTranscriptFilterParams(id, year))
                 .queryParam(PARAM_SELECT, Arrays.stream(TranscriptReportAttributes.values())
@@ -144,7 +155,7 @@ public class MyDevApiClient implements IMyDevApiClient {
         return builder.toUriString();
     }
 
-    private String buildTranscriptFilterParams(Long transcriptUserId, Integer year) {
+    private String buildTranscriptFilterParams(Integer transcriptUserId, Integer year) {
         return FILTER_TRANSCRIPT_QUERY
                 .replace("$TRANSC_USER_ID", String.valueOf(transcriptUserId))
                 .replace("$YEAR", (year - 5) + "-01-01");
@@ -169,13 +180,13 @@ public class MyDevApiClient implements IMyDevApiClient {
         return sb.toString();
     }
 
-    private String getTrainingsLocalEndpointUri(Long cultureId, List<String> objectIds) {
+    private String getTrainingsLocalEndpointUri(Integer cultureId, List<String> objectIds) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.trainingsLocal)
                 .queryParam(PARAM_FILTER, buildTrainingLocalFilterParams(cultureId, objectIds));
         return builder.toUriString();
     }
 
-    private String buildTrainingLocalFilterParams(Long cultureId, List<String> objectIds) {
+    private String buildTrainingLocalFilterParams(Integer cultureId, List<String> objectIds) {
         StringBuilder sb = new StringBuilder();
         sb.append(TrainingLocalReportAttributes.TRAINING_TITLE_LOCAL_CULTURE_ID.getAttribute());
         sb.append(FILTER_EQUAL);

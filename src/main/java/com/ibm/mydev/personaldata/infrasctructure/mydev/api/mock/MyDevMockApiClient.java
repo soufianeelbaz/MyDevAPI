@@ -1,6 +1,7 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.mock;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ibm.mydev.personaldata.domain.developmentactions.DevelopmentAction;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.IMyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.MyDevTrainingLocalView;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.MyDevTrainingView;
@@ -36,7 +37,7 @@ public class MyDevMockApiClient implements IMyDevApiClient {
     }
 
     @Override
-    public MyDevTranscriptView getTranscriptData(Long id, Integer year) {
+    public MyDevTranscriptView getTranscriptData(Integer id, Integer year) {
         return unmarshall(transcripts, MyDevTranscriptView.class);
     }
 
@@ -46,8 +47,13 @@ public class MyDevMockApiClient implements IMyDevApiClient {
     }
 
     @Override
-    public MyDevTrainingLocalView getTrainingLocalData(Long cultureId, List<String> objectIds) {
+    public MyDevTrainingLocalView getTrainingLocalData(Integer cultureId, List<String> objectIds) {
         return unmarshall(trainingLocals, MyDevTrainingLocalView.class);
+    }
+
+    @Override
+    public List<DevelopmentAction> buildDevelopmentActions(MyDevUserView userView, MyDevTranscriptView transcriptView, MyDevTrainingView trainingView, MyDevTrainingLocalView trainingLocalView) {
+        return null;
     }
 
     private <T> T unmarshall(Resource resource, Class<T> clazz) {
