@@ -14,6 +14,8 @@ public class TrainingItem {
 
     private Integer hours;
 
+    private String objectId;
+
     @JsonProperty("title")
     public String getTitle() {
         return title;
@@ -62,6 +64,16 @@ public class TrainingItem {
     @JsonProperty("lo_hours")
     public void setHours(Integer hours) {
         this.hours = hours;
+    }
+
+    @JsonProperty("objectId")
+    public String getObjectId() {
+        return objectId;
+    }
+
+    @JsonProperty("object_id")
+    public void setObjectId(String objectId) {
+        this.objectId = objectId;
     }
 
     public enum TrainingReportAttributes {

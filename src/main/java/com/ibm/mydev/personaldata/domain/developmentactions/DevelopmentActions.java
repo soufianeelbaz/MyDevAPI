@@ -1,12 +1,11 @@
 package com.ibm.mydev.personaldata.domain.developmentactions;
 
-import rx.Observable;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingItem;
 
 import java.util.List;
 
 public interface DevelopmentActions {
 
-    List<DevelopmentAction> getDevelopmentActions(String uid, String year) throws Exception;
+    List<TrainingItem> getDevelopmentActions(String uid, Integer year);
 
-    Observable<List<DevelopmentAction>> getDeveloppementActionsObservable(String uid, Integer year);
 }

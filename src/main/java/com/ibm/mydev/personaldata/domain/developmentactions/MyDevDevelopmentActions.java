@@ -1,22 +1,18 @@
 package com.ibm.mydev.personaldata.domain.developmentactions;
 
 import com.google.common.collect.Lists;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.MyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rx.Observable;
-import rx.Observer;
-import rx.Subscriber;
-import rx.functions.Action1;
 
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.function.BiFunction;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,56 +24,12 @@ public class MyDevDevelopmentActions implements DevelopmentActions {
     @Autowired
     public MyDevApiClient myDevApiClient;
 
-    @Override
-    public List<DevelopmentAction> getDevelopmentActions(String uid, String year) throws Exception {
-        /**MyDevUserView userData = myDevApiClient.getUserData(uid);
-        if (!MyDevView.isEmpty(userData)) {
-            MyDevTranscriptView transcriptData = myDevApiClient.getTranscriptData(userData.getValue().get(0).getId(), Integer.parseInt(year));
-            if (!MyDevView.isEmpty(transcriptData)) {
-                List<String> objectIds = transcriptData.getValue()
-                        .stream()
-                        .map(transcriptItem -> transcriptItem.getTrainingId())
-                        .filter(trainingId -> trainingId != null && !trainingId.isEmpty())
-                        .collect(Collectors.toList());
-                if (!objectIds.isEmpty()) {
-                    MyDevTrainingView trainingData = CompletableFuture.supplyAsync(() ->
-                            myDevApiClient.getTrainingData(objectIds)).get();
-                    MyDevTrainingLocalView trainingLocalData = CompletableFuture.supplyAsync(() ->
-                            myDevApiClient.getTrainingLocalData(userData.getValue().get(0).getLanguageId(), objectIds)).get();
-                    return buildDevelopmentActions(userData, transcriptData, trainingData, trainingLocalData);
-                }
-            }
-        }
-        return Collections.emptyList();**/
-        return null;
-    }
+    @Autowired
+    public MyDevApiConfiguration myDevApiConfiguration;
 
-    private CompletableFuture<MyDevTranscriptView> getUserTranscriptsAsync(MyDevUserView user, String year) {
-        CompletableFuture<MyDevTranscriptView> userTranscripts = CompletableFuture.supplyAsync(
-                () -> {
-                    if (!MyDevView.isEmpty(user) && user.getValue().get(0).getId() != null) {
-                        return myDevApiClient.getTranscriptData(user.getValue().get(0).getId(), Integer.parseInt(year));
-                    } else {
-                        return null;
-                    }
-                });
+    private CompletableFuture<MyDevTranscriptView> getUserTranscriptsAsync(MyDevUserView user, Integer year) {
+        CompletableFuture<MyDevTranscriptView> userTranscripts = CompletableFuture.supplyAsync(() -> myDevApiClient.getTranscriptData(user.getValue().get(0).getId(), year));
         return userTranscripts;
-    }
-
-    private CompletableFuture<MyDevTrainingView> getTrainingsAsync(List<List<String>> objectsIds) {
-        CompletableFuture<MyDevTrainingView> trainings = CompletableFuture.supplyAsync(
-                () -> {
-                    return null;
-                });
-        return trainings;
-    }
-
-    private CompletableFuture<MyDevTrainingView> getTrainingLocalsAsync(List<List<String>> objectsIds) {
-        CompletableFuture<MyDevTrainingView> trainingLocals = CompletableFuture.supplyAsync(
-                () -> {
-                    return null;
-                });
-        return trainingLocals;
     }
 
     private CompletableFuture<List<List<String>>> getObjectIdChunksAsync(MyDevTranscriptView transcripts) {
@@ -88,110 +40,100 @@ public class MyDevDevelopmentActions implements DevelopmentActions {
                         .map(transcriptItem -> transcriptItem.getTrainingId())
                         .filter(trainingId -> trainingId != null && !trainingId.isEmpty())
                         .collect(Collectors.toList());
-                return Lists.partition(objectIds, 10); // todo
+                return Lists.partition(objectIds, myDevApiConfiguration.chunkUrlSize);
             } else {
                 return Collections.emptyList();
             }
         });
     }
 
-    private List<List<String>> getObjectIdsChunks(MyDevTranscriptView transcripts) {
-        List<String> objectIds = transcripts.getValue()
-                .stream()
-                .map(transcriptItem -> transcriptItem.getTrainingId())
-                .filter(trainingId -> trainingId != null && !trainingId.isEmpty())
-                .collect(Collectors.toList());
-        return Lists.partition(objectIds, 10);
+    private static <T> CompletableFuture<List<T>> sequence(List<CompletableFuture<T>> futures) {
+        CompletableFuture<Void> allDoneFuture =
+                CompletableFuture.allOf(futures.toArray(new CompletableFuture[futures.size()]));
+        return allDoneFuture.thenApply(v ->
+                futures.stream().
+                        map(future -> future.join()).
+                        collect(Collectors.<T>toList())
+        );
     }
 
 
-    private CompletableFuture<List<DevelopmentAction>> getTrainingsAndTrainingLocalsCombined(List<List<String>> objectIdsChunks) {
-        /**CompletableFuture.supplyAsync(() -> {
-            List<CompletableFuture<?>> chunkedTrainingFutures = getChunkedTrainingFutures(objectIdsChunks);
-            List<CompletableFuture<?>> chunkedTrainingLocalFutures = getChunkedTrainingLocalFutures(objectIdsChunks);
-        });**/ // Droit au mur !
-        return null;
-    }
 
-    private List<CompletableFuture<?>> getChunkedTrainingFutures(List<List<String>> objectIdsChunks) {
-        return objectIdsChunks
+    private List<CompletableFuture<MyDevTrainingsAndTrainingLocals>> getChunkedTrainingAndTrainingLocalFutures(Integer cultureId,
+                                                                                                               List<List<String>> objectIdsChunks) {
+
+        List<CompletableFuture<MyDevTrainingsAndTrainingLocals>> futures = new ArrayList<>();
+
+        List<CompletableFuture<MyDevTrainingsAndTrainingLocals>> trainings =  objectIdsChunks
                 .stream()
                 .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())
-                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> myDevApiClient.getTrainingData(objectIdsChunk)))
+                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> {
+                    MyDevTrainingView training = myDevApiClient.getTrainingData(objectIdsChunk);
+                    MyDevTrainingsAndTrainingLocals trainingOrLocal = new MyDevTrainingsAndTrainingLocals();
+                    trainingOrLocal.setTraining(training);
+                    return trainingOrLocal;
+                }))
                 .collect(Collectors.toList());
-    }
+        futures.addAll(trainings);
 
-    private List<CompletableFuture<?>> getChunkedTrainingLocalFutures(List<List<String>> objectIdsChunks) {
-        return objectIdsChunks
-                .stream()
-                .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())
-                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> myDevApiClient.getTrainingLocalData(1, objectIdsChunk))) // todo
-                .collect(Collectors.toList());
-    }
+        if (cultureId != null) {
+            List<CompletableFuture<MyDevTrainingsAndTrainingLocals>> trainingLocals =  objectIdsChunks
+                    .stream()
+                    .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())
+                    .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> {
+                        MyDevTrainingLocalView trainingLocal = myDevApiClient.getTrainingLocalData(cultureId, objectIdsChunk);
+                        MyDevTrainingsAndTrainingLocals trainingOrLocal = new MyDevTrainingsAndTrainingLocals();
+                        trainingOrLocal.setTrainingLocal(trainingLocal);
+                        return trainingOrLocal;
+                    }))
+                    .collect(Collectors.toList());
 
-    private List<DevelopmentAction> futures(String uid, String year) {
-        CompletableFuture<List<DevelopmentAction>> developmentActions =
-                CompletableFuture.supplyAsync(() -> myDevApiClient.getUserData(uid))
-                        .thenCompose((user) -> getUserTranscriptsAsync(user, year))
-                        .thenCompose((transcripts) -> getObjectIdChunksAsync(transcripts))
-                        .thenCompose((objectIdChunks) -> getTrainingsAndTrainingLocalsCombined(objectIdChunks));
-        return null;
-    }
-
-    private Observable<MyDevTranscriptView> getTranscriptsDataObservable(Integer userId, Integer year) {
-        return Observable.just(myDevApiClient.getTranscriptData(userId, year));
-    }
-
-    private Observable<MyDevUserView> getUserDataObservable(String uid) {
-        return Observable.just(myDevApiClient.getUserData(uid));
-    }
-
-    private Observable<List<List<String>>> getObjectIdsChunksObservable(List<TranscriptItem> transcriptItems) {
-        List<String> objectIds = transcriptItems.stream()
-                .filter(item -> item.getTrainingId() != null)
-                .map(item -> item.getTrainingId())
-                .collect(Collectors.toList());
-        return Observable.just(Lists.partition(objectIds, 10));
-    }
-
-    private Observable<MyDevTrainingView> getTrainingsObservable(List<List<String>> objectIdsChunks) {
-
-        return Observable.merge(
-                objectIdsChunks
-                        .stream()
-                        .map(objectIdsChunk -> Observable.just(myDevApiClient.getTrainingData(objectIdsChunk)))
-                        .collect(Collectors.toList()));
-    }
-
-    private Observable<MyDevTrainingLocalView> getTrainingLocalsObservable(List<List<String>> objectIdsChunks) {
-
-        return Observable.merge(
-                objectIdsChunks
-                        .stream()
-                        .map(objectIdsChunk -> Observable.just(myDevApiClient.getTrainingLocalData(1, objectIdsChunk))) // todo
-                        .collect(Collectors.toList()));
-    }
-
-    private List<DevelopmentAction> mergeTrainingsAndTrainingLocals(MyDevTrainingView trainingView,
-                                                                    MyDevTrainingLocalView trainingLocalView) {
-        return Collections.emptyList();
+            futures.addAll(trainingLocals);
+        }
+        return futures;
     }
 
     @Override
-    public  Observable<List<DevelopmentAction>> getDeveloppementActionsObservable(String uid, Integer year) {
+    public List<TrainingItem> getDevelopmentActions(String uid, Integer year) {
+        long startTimeMillis = System.currentTimeMillis();
+        MyDevUserView userView = myDevApiClient.getUserData(uid);
+        if (!MyDevView.isEmpty(userView)) {
+            UserItem user = userView.getValue().get(0);
+            CompletableFuture<List<MyDevTrainingsAndTrainingLocals>> trainingsAndLocalsFuture =
+                    getUserTranscriptsAsync(userView, year)
+                            .thenCompose((transcripts) -> getObjectIdChunksAsync(transcripts))
+                            .thenCompose((objectIdChunks) -> sequence(getChunkedTrainingAndTrainingLocalFutures(user.getLanguageId(), objectIdChunks)));
+            try {
 
-        return getUserDataObservable(uid)
-                .filter(userView -> !MyDevView.isEmpty(userView) && userView.getValue().get(0).getId() != null)
-                .flatMap(userView -> Observable.just(userView.getValue().get(0)))
-                .flatMap(userItem -> getTranscriptsDataObservable(userItem.getId(), year))
-                .filter(transcriptsView -> !MyDevView.isEmpty(transcriptsView))
-                .flatMap(transcriptView -> Observable.just(transcriptView.getValue()))
-                .flatMap(transcripts -> getObjectIdsChunksObservable(transcripts))
-                .flatMap(objectIdsChunks -> Observable.zip(
-                        getTrainingsObservable(objectIdsChunks),
-                        getTrainingLocalsObservable(objectIdsChunks),
-                        (myDevTrainingView, myDevTrainingLocalView) -> mergeTrainingsAndTrainingLocals(myDevTrainingView, myDevTrainingLocalView)))
-                .doOnNext(listObservable -> LOGGER.info("Done"))
-                .doOnError(throwable -> LOGGER.error(throwable.getMessage()));
+                List<MyDevTrainingsAndTrainingLocals> trainingsAndLocals = trainingsAndLocalsFuture.get();
+
+                List<TrainingItem> trainings = trainingsAndLocals
+                        .stream()
+                        .filter(trainingOrLocal -> trainingOrLocal.getTraining() != null && trainingOrLocal.getTraining().getValue() != null)
+                        .map(trainingOrLocal -> trainingOrLocal.getTraining().getValue())
+                        .flatMap(Collection::stream)
+                        .filter(trainingItem -> trainingItem.getObjectId() != null)
+                        .collect(Collectors.toList());
+
+                Map<String, TrainingLocalItem> trainingLocalsMappedById = trainingsAndLocals
+                        .stream()
+                        .filter(trainingOrLocal -> trainingOrLocal.getTrainingLocal() != null && trainingOrLocal.getTrainingLocal().getValue() != null)
+                        .map(trainingOrLocal -> trainingOrLocal.getTrainingLocal().getValue())
+                        .flatMap(Collection::stream)
+                        .filter(trainingLocalItem -> trainingLocalItem.getObjectId() != null)
+                        .collect(Collectors.toMap(TrainingLocalItem::getObjectId, Function.identity()));
+
+                long endTimeMillis = System.currentTimeMillis();
+                LOGGER.info("The request took : " + ((endTimeMillis - startTimeMillis) / 1000) + " seconds.");
+
+                return trainings; // todo: transformation la liste des formation mydev en actions de développement.
+
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            }
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

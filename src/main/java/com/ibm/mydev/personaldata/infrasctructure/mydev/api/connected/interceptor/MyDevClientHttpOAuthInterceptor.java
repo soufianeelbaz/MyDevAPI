@@ -24,7 +24,7 @@ public class MyDevClientHttpOAuthInterceptor implements ClientHttpRequestInterce
                                         ClientHttpRequestExecution execution) throws IOException {
         ClientHttpResponse response = execution.execute(request, body);
         if (HttpStatus.UNAUTHORIZED == response.getStatusCode()) {
-            String accessToken = tokenService.getAccessToken();
+            String accessToken = tokenService.getAccessToken(true);
             if (!StringUtils.isEmpty(accessToken)) {
                 request.getHeaders().remove(HttpHeaders.AUTHORIZATION);
                 request.getHeaders().add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);

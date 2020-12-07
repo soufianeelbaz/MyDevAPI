@@ -5,6 +5,7 @@ import com.ibm.mydev.personaldata.domain.developmentactions.DevelopmentAction;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.IMyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.interceptor.MyDevClientHttpRequestInterceptor;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.MyDevTokenService;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingItem.TrainingReportAttributes;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingLocalItem.TrainingLocalReportAttributes;
@@ -63,6 +64,9 @@ public class MyDevApiClient implements IMyDevApiClient {
     @Qualifier("MyDevRestTemplate")
     public RestTemplate restTemplate;
 
+    @Autowired
+    public MyDevTokenService tokenService;
+
     public <T> T query(String url, HttpEntity request, Class<T> clazz) {
         return restTemplate.exchange(url, HttpMethod.GET, request, clazz).getBody();
     }
@@ -98,23 +102,14 @@ public class MyDevApiClient implements IMyDevApiClient {
         LOGGER.info("Triggered => getTrainingLocalData");
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
-
-        List<List<String>> partObjectIds = Lists.partition(objectIds, apiConfiguration.chunkUrlSize);
-        MyDevTrainingLocalView myDevTrainingLocalView = new MyDevTrainingLocalView();
-        partObjectIds.forEach(objIds -> {
-            String urlWithParams = getTrainingsLocalEndpointUri(cultureId, objIds);
-            MyDevTrainingLocalView myDevTrainingLocalViewTemp = query(urlWithParams, request, MyDevTrainingLocalView.class);
-            myDevTrainingLocalView.setContext(myDevTrainingLocalViewTemp.getContext());
-            myDevTrainingLocalView.getValue().addAll(myDevTrainingLocalViewTemp.getValue());
-        });
-
-        return myDevTrainingLocalView;
+        String urlWithParams = getTrainingsLocalEndpointUri(cultureId, objectIds);
+        return query(urlWithParams, request, MyDevTrainingLocalView.class);
     }
 
     private HttpHeaders getHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, "application/json");
-        headers.set(AUTHORIZATION_KEY, "Bearer WRONG_TOKEN");
+        headers.set(AUTHORIZATION_KEY, "Bearer " + tokenService.getAccessToken());
         return headers;
     }
 
