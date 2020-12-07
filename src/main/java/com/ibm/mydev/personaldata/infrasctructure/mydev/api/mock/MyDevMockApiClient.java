@@ -51,11 +51,6 @@ public class MyDevMockApiClient implements IMyDevApiClient {
         return unmarshall(trainingLocals, MyDevTrainingLocalView.class);
     }
 
-    @Override
-    public List<DevelopmentAction> buildDevelopmentActions(MyDevUserView userView, MyDevTranscriptView transcriptView, MyDevTrainingView trainingView, MyDevTrainingLocalView trainingLocalView) {
-        return null;
-    }
-
     private <T> T unmarshall(Resource resource, Class<T> clazz) {
         ObjectMapper mapper = new ObjectMapper();
         try {

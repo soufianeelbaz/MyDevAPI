@@ -17,7 +17,4 @@ public interface IMyDevApiClient {
     MyDevTrainingView getTrainingData(List<String> objectId);
 
     MyDevTrainingLocalView getTrainingLocalData(Integer cultureId, List<String> objectIds);
-
-    List<DevelopmentAction> buildDevelopmentActions(MyDevUserView userView, MyDevTranscriptView transcriptView, MyDevTrainingView trainingView, MyDevTrainingLocalView trainingLocalView);
-
 }

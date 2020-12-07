@@ -1,11 +1,12 @@
-package com.ibm.mydev.personaldata.domain.developmentactions.repository;
+package com.ibm.mydev.personaldata.domain.developmentactions;
 
-import com.ibm.mydev.personaldata.domain.developmentactions.DevelopmentAction;
+import rx.Observable;
 
 import java.util.List;
 
 public interface DevelopmentActions {
 
-    List<DevelopmentAction> getDevelopmentActions(String uid);
+    List<DevelopmentAction> getDevelopmentActions(String uid, String year) throws Exception;
 
+    Observable<List<DevelopmentAction>> getDeveloppementActionsObservable(String uid, Integer year);
 }

@@ -4,11 +4,14 @@ import com.google.common.collect.Lists;
 import com.ibm.mydev.personaldata.domain.developmentactions.DevelopmentAction;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.IMyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.interceptor.MyDevClientHttpRequestInterceptor;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingItem.TrainingReportAttributes;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingLocalItem.TrainingLocalReportAttributes;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TranscriptItem.TranscriptReportAttributes;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.UserItem.UserReportAttributes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
@@ -21,12 +24,16 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Profile("!MYDEV_MOCK")
 @Service
 public class MyDevApiClient implements IMyDevApiClient {
+
+    private static Logger LOGGER = LoggerFactory
+            .getLogger(MyDevApiClient.class);
 
     public static final String AUTHORIZATION_KEY = "Authorization";
 
@@ -79,23 +86,16 @@ public class MyDevApiClient implements IMyDevApiClient {
 
     @Override
     public MyDevTrainingView getTrainingData(List<String> objectIds) {
+        LOGGER.info("Triggered => getTrainingData");
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
-
-        List<List<String>> partObjectIds = Lists.partition(objectIds, apiConfiguration.chunkUrlSize);
-        MyDevTrainingView myDevTrainingView = new MyDevTrainingView();
-        partObjectIds.forEach(objIds -> {
-            String urlWithParams = getTrainingsEndpointUri(objIds);
-            MyDevTrainingView myDevTrainingViewTemp = query(urlWithParams, request, MyDevTrainingView.class);
-            myDevTrainingView.setContext(myDevTrainingViewTemp.getContext());
-            myDevTrainingView.getValue().addAll(myDevTrainingViewTemp.getValue());
-        });
-
-        return myDevTrainingView;
+        String urlWithParams = getTrainingsEndpointUri(objectIds);
+        return query(urlWithParams, request, MyDevTrainingView.class);
     }
 
     @Override
     public MyDevTrainingLocalView getTrainingLocalData(Integer cultureId, List<String> objectIds) {
+        LOGGER.info("Triggered => getTrainingLocalData");
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
 
@@ -109,15 +109,6 @@ public class MyDevApiClient implements IMyDevApiClient {
         });
 
         return myDevTrainingLocalView;
-    }
-
-    @Override
-    public List<DevelopmentAction> buildDevelopmentActions(MyDevUserView userView, MyDevTranscriptView transcriptView, MyDevTrainingView trainingView, MyDevTrainingLocalView trainingLocalView) {
-        List<DevelopmentAction> developmentActions = new ArrayList<>();
-        DevelopmentAction developmentAction = new DevelopmentAction();
-        developmentAction.setSource(userView.getValue().get(0).getCollaborator());
-        developmentActions.add(developmentAction);
-        return developmentActions;
     }
 
     private HttpHeaders getHeaders() {

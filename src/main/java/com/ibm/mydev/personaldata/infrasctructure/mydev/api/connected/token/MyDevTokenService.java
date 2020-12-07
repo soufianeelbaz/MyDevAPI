@@ -8,6 +8,7 @@ public class MyDevTokenService implements IMyDevTokenService {
     private RestTemplate restTemplate;
     private String authUrl;
     private MyDevTokenRequestBody requestBody;
+    private String token; // todo
 
     public MyDevTokenService(RestTemplate restTemplate, String authUrl, MyDevTokenRequestBody requestBody) {
         this.restTemplate = restTemplate;
@@ -33,5 +34,13 @@ public class MyDevTokenService implements IMyDevTokenService {
         headers.set(HttpHeaders.ACCEPT, "application/json");
         headers.set(HttpHeaders.CACHE_CONTROL, "no-cache");
         return headers;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
