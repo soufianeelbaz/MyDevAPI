@@ -9,23 +9,25 @@ import org.springframework.http.client.ClientHttpResponse;
 
 import java.io.IOException;
 
-public class MyDevClientHttpRequestInterceptor implements ClientHttpRequestInterceptor {
+public class MyDevClientHttpLogInterceptor implements ClientHttpRequestInterceptor {
 
     private static Logger LOGGER = LoggerFactory
-            .getLogger(MyDevClientHttpRequestInterceptor.class);
+            .getLogger(MyDevClientHttpLogInterceptor.class);
 
     @Override
     public ClientHttpResponse intercept(
             HttpRequest request, byte[] body,
             ClientHttpRequestExecution execution) throws IOException {
-
-        logRequestDetails(request);
-        return execution.execute(request, body);
+        ClientHttpResponse response = execution.execute(request, body);
+        logRequestAndResponseDetails(request, response);
+        return response;
     }
 
-    private void logRequestDetails(HttpRequest request) {
+    private void logRequestAndResponseDetails(HttpRequest request, ClientHttpResponse response) throws IOException {
         LOGGER.info("Headers: {}", request.getHeaders());
         LOGGER.info("Request Method: {}", request.getMethod());
         LOGGER.info("Request URI: {}", request.getURI());
+        LOGGER.info("Response status code: {}", response.getStatusCode());
+        LOGGER.info("Response status text: {} {}", response.getStatusText(), System.getProperty("line.separator"));
     }
 }

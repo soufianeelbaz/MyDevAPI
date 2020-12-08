@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,19 +31,17 @@ public class MyDevDevelopmentActions implements DevelopmentActions {
         return userTranscripts;
     }
 
-    private CompletableFuture<List<List<String>>> getObjectIdChunksAsync(MyDevTranscriptView transcripts) {
-        return CompletableFuture.supplyAsync(() -> {
-            if (!MyDevView.isEmpty(transcripts)) {
-                List<String> objectIds = transcripts.getValue()
-                        .stream()
-                        .map(transcriptItem -> transcriptItem.getTrainingId())
-                        .filter(trainingId -> trainingId != null && !trainingId.isEmpty())
-                        .collect(Collectors.toList());
-                return Lists.partition(objectIds, myDevApiConfiguration.chunkUrlSize);
-            } else {
-                return Collections.emptyList();
-            }
-        });
+    private List<List<String>> getObjectIdsChunks(MyDevTranscriptView transcripts) {
+        if (!MyDevView.isEmpty(transcripts)) {
+            List<String> objectIds = transcripts.getValue()
+                    .stream()
+                    .map(transcriptItem -> transcriptItem.getTrainingId())
+                    .filter(trainingId -> trainingId != null && !trainingId.isEmpty())
+                    .collect(Collectors.toList());
+            return Lists.partition(objectIds, myDevApiConfiguration.chunkUrlSize);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private static <T> CompletableFuture<List<T>> sequence(List<CompletableFuture<T>> futures) {
@@ -57,83 +54,58 @@ public class MyDevDevelopmentActions implements DevelopmentActions {
         );
     }
 
-
-
-    private List<CompletableFuture<MyDevTrainingsAndTrainingLocals>> getChunkedTrainingAndTrainingLocalFutures(Integer cultureId,
-                                                                                                               List<List<String>> objectIdsChunks) {
-
-        List<CompletableFuture<MyDevTrainingsAndTrainingLocals>> futures = new ArrayList<>();
-
-        List<CompletableFuture<MyDevTrainingsAndTrainingLocals>> trainings =  objectIdsChunks
+    private List<CompletableFuture<MyDevTrainingLocalView>> getChunkedTrainingLocalFutures(Integer cultureId, List<List<String>> objectIdsChunks) {
+        return objectIdsChunks
                 .stream()
                 .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())
-                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> {
-                    MyDevTrainingView training = myDevApiClient.getTrainingData(objectIdsChunk);
-                    MyDevTrainingsAndTrainingLocals trainingOrLocal = new MyDevTrainingsAndTrainingLocals();
-                    trainingOrLocal.setTraining(training);
-                    return trainingOrLocal;
-                }))
+                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> myDevApiClient.getTrainingLocalData(cultureId, objectIdsChunk)))
                 .collect(Collectors.toList());
-        futures.addAll(trainings);
+    }
 
-        if (cultureId != null) {
-            List<CompletableFuture<MyDevTrainingsAndTrainingLocals>> trainingLocals =  objectIdsChunks
-                    .stream()
-                    .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())
-                    .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> {
-                        MyDevTrainingLocalView trainingLocal = myDevApiClient.getTrainingLocalData(cultureId, objectIdsChunk);
-                        MyDevTrainingsAndTrainingLocals trainingOrLocal = new MyDevTrainingsAndTrainingLocals();
-                        trainingOrLocal.setTrainingLocal(trainingLocal);
-                        return trainingOrLocal;
-                    }))
-                    .collect(Collectors.toList());
-
-            futures.addAll(trainingLocals);
-        }
-        return futures;
+    private List<CompletableFuture<MyDevTrainingView>> getChunkedTrainingFutures(List<List<String>> objectIdsChunks) {
+        return objectIdsChunks
+                .stream()
+                .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())
+                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> myDevApiClient.getTrainingData(objectIdsChunk)))
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<TrainingItem> getDevelopmentActions(String uid, Integer year) {
         long startTimeMillis = System.currentTimeMillis();
-        MyDevUserView userView = myDevApiClient.getUserData(uid);
+        final MyDevUserView userView = myDevApiClient.getUserData(uid);
         if (!MyDevView.isEmpty(userView)) {
-            UserItem user = userView.getValue().get(0);
-            CompletableFuture<List<MyDevTrainingsAndTrainingLocals>> trainingsAndLocalsFuture =
-                    getUserTranscriptsAsync(userView, year)
-                            .thenCompose((transcripts) -> getObjectIdChunksAsync(transcripts))
-                            .thenCompose((objectIdChunks) -> sequence(getChunkedTrainingAndTrainingLocalFutures(user.getLanguageId(), objectIdChunks)));
-            try {
+            final UserItem user = userView.getValue().get(0);
+            if (user != null && user.getId() != null) {
 
-                List<MyDevTrainingsAndTrainingLocals> trainingsAndLocals = trainingsAndLocalsFuture.get();
+                final MyDevTranscriptView transcriptData = myDevApiClient.getTranscriptData(user.getId(), year);
+                final List<List<String>> objectIdsChunks = getObjectIdsChunks(transcriptData);
 
-                List<TrainingItem> trainings = trainingsAndLocals
-                        .stream()
-                        .filter(trainingOrLocal -> trainingOrLocal.getTraining() != null && trainingOrLocal.getTraining().getValue() != null)
-                        .map(trainingOrLocal -> trainingOrLocal.getTraining().getValue())
-                        .flatMap(Collection::stream)
-                        .filter(trainingItem -> trainingItem.getObjectId() != null)
-                        .collect(Collectors.toList());
+                final CompletableFuture<List<MyDevTrainingLocalView>> trainingLocalFutures =
+                        sequence(getChunkedTrainingLocalFutures(user.getLanguageId(), objectIdsChunks));
+                final CompletableFuture<List<MyDevTrainingView>> trainingFutures =
+                        sequence(getChunkedTrainingFutures(objectIdsChunks));
 
-                Map<String, TrainingLocalItem> trainingLocalsMappedById = trainingsAndLocals
-                        .stream()
-                        .filter(trainingOrLocal -> trainingOrLocal.getTrainingLocal() != null && trainingOrLocal.getTrainingLocal().getValue() != null)
-                        .map(trainingOrLocal -> trainingOrLocal.getTrainingLocal().getValue())
-                        .flatMap(Collection::stream)
-                        .filter(trainingLocalItem -> trainingLocalItem.getObjectId() != null)
-                        .collect(Collectors.toMap(TrainingLocalItem::getObjectId, Function.identity()));
+                try {
 
-                long endTimeMillis = System.currentTimeMillis();
-                LOGGER.info("The request took : " + ((endTimeMillis - startTimeMillis) / 1000) + " seconds.");
+                    final List<MyDevTrainingView> myDevTrainingViews = trainingFutures.get();
+                    final List<MyDevTrainingLocalView> myDevTrainingLocalViews = trainingLocalFutures.get();
 
-                return trainings; // todo: transformation la liste des formation mydev en actions de développement.
+                    long endTimeMillis = System.currentTimeMillis();
 
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-                return null;
+                    System.out.println("The request took : " + ((endTimeMillis - startTimeMillis) / 1000));
+
+                    return myDevTrainingViews
+                            .stream()
+                            .map(trainingView -> trainingView.getValue())
+                            .flatMap(List::stream)
+                            .collect(Collectors.toList());
+
+                } catch (InterruptedException | ExecutionException e) {
+                    LOGGER.error(e.getMessage());
+                }
             }
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

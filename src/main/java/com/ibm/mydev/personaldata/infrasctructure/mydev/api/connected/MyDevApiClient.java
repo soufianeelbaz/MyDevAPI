@@ -1,10 +1,7 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected;
 
-import com.google.common.collect.Lists;
-import com.ibm.mydev.personaldata.domain.developmentactions.DevelopmentAction;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.IMyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
-import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.interceptor.MyDevClientHttpRequestInterceptor;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.MyDevTokenService;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingItem.TrainingReportAttributes;
@@ -23,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,6 +68,7 @@ public class MyDevApiClient implements IMyDevApiClient {
 
     @Override
     public MyDevUserView getUserData(String uid) {
+        LOGGER.info("Récupération des données utilisateur \"{}\".", uid);
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
         String urlWithParams = getUsersEndpointUri(uid);
@@ -81,6 +77,7 @@ public class MyDevApiClient implements IMyDevApiClient {
 
     @Override
     public MyDevTranscriptView getTranscriptData(Integer id, Integer year) {
+        LOGGER.info("Récupération des données transcript de l'utilisateur {} depuis l'année {}.", id, year);
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
         String urlWithParams = getTranscriptsEndpointUri(id, year);
@@ -90,7 +87,7 @@ public class MyDevApiClient implements IMyDevApiClient {
 
     @Override
     public MyDevTrainingView getTrainingData(List<String> objectIds) {
-        LOGGER.info("Triggered => getTrainingData");
+        LOGGER.info("Récupération de la liste des formations {}.", objectIds);
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
         String urlWithParams = getTrainingsEndpointUri(objectIds);
@@ -99,7 +96,7 @@ public class MyDevApiClient implements IMyDevApiClient {
 
     @Override
     public MyDevTrainingLocalView getTrainingLocalData(Integer cultureId, List<String> objectIds) {
-        LOGGER.info("Triggered => getTrainingLocalData");
+        LOGGER.info("Récupération des traductions pour les formations {}.", objectIds);
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
         String urlWithParams = getTrainingsLocalEndpointUri(cultureId, objectIds);

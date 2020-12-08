@@ -62,18 +62,9 @@ public class MyDevApiConfiguration {
         return new RestTemplate();
     }
 
-    private MyDevTokenRequestBody getAuthRequestBody() {
-        MyDevTokenRequestBody body = new MyDevTokenRequestBody();
-        body.setClientId(clientId);
-        body.setClientSecret(clientSecret);
-        body.setGrantType("client_credentials");
-        body.setScope("all");
-        return body;
-    }
-
     @Bean
     public MyDevTokenService myDevTokenService() {
-        return new MyDevTokenService(myDevOAuthRestTemplate(), baseUrl + authentication , getAuthRequestBody());
+        return new MyDevTokenService(myDevOAuthRestTemplate(), baseUrl + authentication);
     }
 
     @Bean
