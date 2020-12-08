@@ -1,17 +1,22 @@
 import com.ibm.mydev.MyDevSpringApplication;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.MyDevApiClient;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.client.RestClientTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
@@ -22,8 +27,10 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @RestClientTest(MyDevApiClient.class)
-//@ContextConfiguration(classes = RestClientItConfig.class)
 @SpringBootTest(classes = MyDevSpringApplication.class)
+@ComponentScan(basePackages = {
+        "com.ibm.mydev.personaldata.infrasctructure.mydev.api"
+})
 @ActiveProfiles("MYDEV_REAL")
 public class MyDevApiClientLocalItTest {
 
@@ -31,6 +38,7 @@ public class MyDevApiClientLocalItTest {
     @Qualifier("MyDevRestTemplate")
     private RestTemplate restTemplate;
 
+    @InjectMocks
     @Autowired
     private MyDevApiClient sut;
 
@@ -45,7 +53,7 @@ public class MyDevApiClientLocalItTest {
     public void testGetUserData() {
 
         mockServer
-                .expect(requestTo("https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_user"))
+                .expect(requestTo("https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/vw_rpt_user?$filter=user_ref%2520eq%2520'cesadmin'&$select=user_ref,user_id,user_language_id"))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withSuccess("cesadmin", MediaType.APPLICATION_JSON));
 
