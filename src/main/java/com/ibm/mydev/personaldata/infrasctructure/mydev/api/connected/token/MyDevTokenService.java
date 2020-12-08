@@ -1,9 +1,15 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token;
 
+import com.ibm.mydev.personaldata.domain.developmentactions.MyDevDevelopmentActions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
 public class MyDevTokenService implements IMyDevTokenService {
+
+    private static Logger LOGGER = LoggerFactory
+            .getLogger(MyDevDevelopmentActions.class);
 
     private RestTemplate restTemplate;
     private String authUrl;
@@ -17,24 +23,24 @@ public class MyDevTokenService implements IMyDevTokenService {
     }
 
     @Override
-    public String getAccessToken(Boolean existingTokenInvalid) {
-        if (existingTokenInvalid) {
-            HttpHeaders headers = getHeaders();
-            HttpEntity request = new HttpEntity(requestBody, headers);
-            ResponseEntity<MyDevTokenResponseBody> response = restTemplate.exchange(
-                    authUrl, HttpMethod.POST,
-                    request, MyDevTokenResponseBody.class);
-            if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
-                token = response.getBody().getAccessToken();
-            }
+    public void forceUpdate() {
+        HttpHeaders headers = getHeaders();
+        HttpEntity request = new HttpEntity(requestBody, headers);
+        ResponseEntity<MyDevTokenResponseBody> response = restTemplate.exchange(
+                authUrl, HttpMethod.POST,
+                request, MyDevTokenResponseBody.class);
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+            token = response.getBody().getAccessToken();
+            LOGGER.error("Token récupéré avec succès: {}", token);
+        } else {
+            LOGGER.error("Erreur lors de la récupération du token: {}", response.getStatusCode());
         }
-        return token;
     }
 
     @Override
     public String getAccessToken() {
         if (token == null) {
-            return getAccessToken(true);
+            forceUpdate();
         }
         return token;
     }
