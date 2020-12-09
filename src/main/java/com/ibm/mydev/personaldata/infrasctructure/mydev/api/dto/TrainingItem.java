@@ -16,6 +16,18 @@ public class TrainingItem {
 
     private String objectId;
 
+    public TrainingItem() {
+    }
+
+    public TrainingItem(String title, String startDate, String endDate, String category, Integer hours, String objectId) {
+        this.title = title;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.category = category;
+        this.hours = hours;
+        this.objectId = objectId;
+    }
+
     @JsonProperty("title")
     public String getTitle() {
         return title;

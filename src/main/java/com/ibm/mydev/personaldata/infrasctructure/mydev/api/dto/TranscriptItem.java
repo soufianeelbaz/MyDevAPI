@@ -24,15 +24,32 @@ public class TranscriptItem {
 
     private Integer trainingPurpose;
 
-    private Long userId;
+    private Integer userId;
+
+    public TranscriptItem() {
+    }
+
+    public TranscriptItem(String trainingId, Integer status, Integer isLatest, Integer isArchived, Boolean isRemoved, Boolean isStandalone, String registrationDate, String dueDate, String completionDate, Integer trainingPurpose, Integer userId) {
+        this.trainingId = trainingId;
+        this.status = status;
+        this.isLatest = isLatest;
+        this.isArchived = isArchived;
+        this.isRemoved = isRemoved;
+        this.isStandalone = isStandalone;
+        this.registrationDate = registrationDate;
+        this.dueDate = dueDate;
+        this.completionDate = completionDate;
+        this.trainingPurpose = trainingPurpose;
+        this.userId = userId;
+    }
 
     @JsonProperty("userId")
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
     @JsonProperty("transc_user_id")
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 

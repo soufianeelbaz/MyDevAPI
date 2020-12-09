@@ -3,6 +3,7 @@ package com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MyDevView<T> {
@@ -23,6 +24,9 @@ public abstract class MyDevView<T> {
     }
 
     public List<T> getValue() {
+        if (value == null) {
+            value = new ArrayList<>();
+        }
         return value;
     }
 

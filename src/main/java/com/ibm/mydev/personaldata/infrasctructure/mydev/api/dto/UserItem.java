@@ -10,6 +10,15 @@ public class UserItem {
 
     private Integer languageId;
 
+    public UserItem() {
+    }
+
+    public UserItem(Integer id, String collaborator, Integer languageId) {
+        this.id = id;
+        this.collaborator = collaborator;
+        this.languageId = languageId;
+    }
+
     @JsonProperty("id")
     public Integer getId() {
         return id;

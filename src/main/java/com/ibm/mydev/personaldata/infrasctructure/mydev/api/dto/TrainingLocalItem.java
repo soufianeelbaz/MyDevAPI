@@ -8,8 +8,16 @@ public class TrainingLocalItem {
 
     private String title;
 
-    private Long cultureId;
+    private Integer cultureId;
 
+    public TrainingLocalItem() {
+    }
+
+    public TrainingLocalItem(String objectId, String title, Integer cultureId) {
+        this.objectId = objectId;
+        this.title = title;
+        this.cultureId = cultureId;
+    }
 
     @JsonProperty("objectId")
     public String getObjectId() {
@@ -32,12 +40,12 @@ public class TrainingLocalItem {
     }
 
     @JsonProperty("cultureId")
-    public Long getCultureId() {
+    public Integer getCultureId() {
         return cultureId;
     }
 
     @JsonProperty("training_title_local_culture_id")
-    public void setCultureId(Long cultureId) {
+    public void setCultureId(Integer cultureId) {
         this.cultureId = cultureId;
     }
 
