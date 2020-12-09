@@ -7,10 +7,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
@@ -19,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.any;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MyDevApiClientLocalItTest {
@@ -60,10 +56,12 @@ public class MyDevApiClientLocalItTest {
 
         mockedUserView.setValue(users);
 
+        AccessTokenMatcher accessTokenMatcher = new AccessTokenMatcher("Bearer TEST_TOKEN");
+
         Mockito.when(restTemplate.exchange(
                 eq("https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/vw_rpt_user?$filter=user_ref%20eq%20'cesadmin'&$select=user_ref,user_id,user_language_id"),
                 eq(HttpMethod.GET),
-                any(HttpEntity.class),
+                Matchers.argThat(accessTokenMatcher),
                 eq(MyDevUserView.class)))
                 .thenReturn(new ResponseEntity<>(mockedUserView, HttpStatus.OK));
 
@@ -75,5 +73,39 @@ public class MyDevApiClientLocalItTest {
         Assert.assertEquals(Integer.valueOf(1), userView.getValue().get(0).getId());
         Assert.assertEquals(Integer.valueOf(2), userView.getValue().get(0).getLanguageId());
         Assert.assertEquals("cesadmin", userView.getValue().get(0).getCollaborator());
+    }
+
+
+    private class AccessTokenMatcher extends ArgumentMatcher<HttpEntity> {
+
+        private final String compareValue;
+
+        public AccessTokenMatcher(String compareValue) {
+            this.compareValue= compareValue;
+        }
+
+        @Override
+        public boolean matches(Object argument) {
+
+            HttpEntity entity = (HttpEntity) argument;
+
+            if (compareValue != null) {
+                if (entity != null) {
+                    HttpHeaders headers = entity.getHeaders();
+                    if (headers != null) {
+                        List<String> token = headers.getOrDefault("Authorization", null);
+                        return !token.isEmpty() && token.get(0).equals(compareValue);
+                    } else {
+                        return false;
+                    }
+                }
+            } else {
+                return entity == null ||
+                        entity.getHeaders() == null ||
+                        entity.getHeaders().get("Authorization").isEmpty() ||
+                        entity.getHeaders().get("Authorization").get(0) == null;
+            }
+            return false;
+        }
     }
 }
