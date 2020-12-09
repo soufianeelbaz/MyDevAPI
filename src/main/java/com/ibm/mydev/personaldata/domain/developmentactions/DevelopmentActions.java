@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface DevelopmentActions {
 
-    List<TrainingItem> getDevelopmentActions(String uid, Integer year);
+    List<DevelopmentAction> getDevelopmentActions(String uid, Integer year);
 
 }
