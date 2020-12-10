@@ -1,12 +1,53 @@
 {
+    "@odata.context": "https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_training",
     "value": [
         {
-            "object_id": "5c194dc6-3840-4d4b-843e-04668923ca7e",
-            "lo_title": "Travailler ma mobilité",
+            "object_id": "2cc69cdf-97c4-4e64-bc63-023a3d4153f7",
+            "lo_title": "Clarity ITG-Web",
+            "lo_start_dt": "2016-09-20T07:00:00Z",
+            "lo_end_dt": "2016-09-20T10:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 3.00
+        },
+        {
+            "object_id": "bea1e4fa-50b1-4ab7-89ec-046cb5168508",
+            "lo_title": "Sensibilisation Code de Conduite",
             "lo_start_dt": null,
             "lo_end_dt": null,
-            "lo_object_type": "EVNT",
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.50
+        },
+        {
+            "object_id": "5ced1e81-aff1-44ff-adb3-04b302f2cb9e",
+            "lo_title": "Visite des Data Center",
+            "lo_start_dt": "2016-09-27T10:50:00Z",
+            "lo_end_dt": "2016-09-27T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 5.17
+        },
+        {
+            "object_id": "5b33e631-5dfe-440e-88db-04d85a872c06",
+            "lo_title": "Formation externe Test",
+            "lo_start_dt": "2020-11-15T23:00:00Z",
+            "lo_end_dt": "2020-11-17T23:00:00Z",
+            "lo_object_type": "EXTL",
             "lo_hours": 21.00
+        },
+        {
+            "object_id": "454101ac-c8de-4cfd-a2b0-05029432d2cb",
+            "lo_title": "Relancer une proposition d’assurance - BDDF Réseaux",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.33
+        },
+        {
+            "object_id": "e3493eb5-9c98-4c15-9bff-05ea707e5969",
+            "lo_title": "HR - Personal Data Protection - Awareness",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 2.00
         },
         {
             "object_id": "3d11038a-3928-4a00-9dde-06a5de4ce262",
@@ -17,325 +58,1180 @@
             "lo_hours": 0.50
         },
         {
-            "object_id": "bf7efe88-382f-4837-9a67-13863aeab110",
-            "lo_title": "How to make stress your friend (Embeded video)",
+            "object_id": "91f37b40-1132-4710-947e-09ad8cbcecc0",
+            "lo_title": "BNP CYBER-DEFENCE",
             "lo_start_dt": null,
             "lo_end_dt": null,
-            "lo_object_type": "VID ",
-            "lo_hours": 0.25
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.50
         },
         {
-            "object_id": "b9588180-1868-43bd-99d4-14e32e46d2fb",
-            "lo_title": "Gedragscodes voor medewerkers",
+            "object_id": "c863d149-ff21-4ca3-963b-0e21b2805ced",
+            "lo_title": "Anglais - Micro Learning - 12 mois",
+            "lo_start_dt": "2016-03-01T08:00:00Z",
+            "lo_end_dt": "2016-03-06T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 40.00
+        },
+        {
+            "object_id": "e5158bbf-9242-4cb5-9eee-0ee7236b170b",
+            "lo_title": "Fonctions Groupe - Lutte contre le blanchiment - Cas pratique : Connectic",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.58
+        },
+        {
+            "object_id": "53203db3-c9a8-4f33-8bc5-0f259b01dfc6",
+            "lo_title": "(Compliance) Markets in Financial Instrument Directive 2 (MiFID 2) - Awareness",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "PRGM",
-            "lo_hours": 1.00
+            "lo_hours": 0.75
         },
         {
-            "object_id": "3e677399-2acb-444d-975f-17f37ea16fb5",
-            "lo_title": "Risk Awareness",
+            "object_id": "cf67af2b-fcfe-4c3c-b1b0-0f4b7e5e6a51",
+            "lo_title": "Let's get digital 2.0",
             "lo_start_dt": null,
             "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 1.00
-        },
-        {
-            "object_id": "42487c81-beb1-428a-a98f-1e1b24227bae",
-            "lo_title": "GreenLight",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 1.00
-        },
-        {
-            "object_id": "0ffe0234-6a77-43b2-bf2f-1f37e9dfe178",
-            "lo_title": "Test Ext Traning",
-            "lo_start_dt": "2015-02-01T23:00:00Z",
-            "lo_end_dt": "2015-02-11T23:00:00Z",
-            "lo_object_type": "EXTL",
-            "lo_hours": 10.00
-        },
-        {
-            "object_id": "41d1abd8-ae5a-471e-bf61-2a204d720283",
-            "lo_title": "Travel Security Online Learning (fr) OLD",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 1.00
-        },
-        {
-            "object_id": "c67f52d2-ad39-4eb3-ba06-2aed1045894d",
-            "lo_title": "test",
-            "lo_start_dt": "2015-12-14T08:00:00Z",
-            "lo_end_dt": "2015-12-14T08:00:00Z",
-            "lo_object_type": "EXTL",
+            "lo_object_type": "MTRL",
             "lo_hours": 3.00
         },
         {
-            "object_id": "1a440032-2593-491d-8f6e-2c45823a0377",
-            "lo_title": "INTUITION - Prime Brokerage - An Introduction",
+            "object_id": "0ac3403d-3cda-4afc-b5bc-1087a44ceb73",
+            "lo_title": "Renforcer son assertivité : s'affirmer dans l'échange (Fonctions Groupe)",
             "lo_start_dt": null,
             "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 1.00
+            "lo_object_type": "EVNT",
+            "lo_hours": 14.00
         },
         {
-            "object_id": "0cf3da89-8e37-44ed-98c3-37d6fd7834a6",
-            "lo_title": "123",
-            "lo_start_dt": "2011-10-04T22:00:00Z",
-            "lo_end_dt": "2011-10-04T22:00:00Z",
-            "lo_object_type": "EXTL",
+            "object_id": "e994afbd-debf-49c4-ae75-10896e60bda3",
+            "lo_title": "Managing Multicultural Teams",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 8.00
+        },
+        {
+            "object_id": "f92e532d-f43b-4e07-8ab2-10daf2df37a1",
+            "lo_title": "Feedback au fil de l'eau",
+            "lo_start_dt": "2017-05-12T12:00:00Z",
+            "lo_end_dt": "2017-05-12T14:00:00Z",
+            "lo_object_type": "SESN",
             "lo_hours": 2.00
         },
         {
-            "object_id": "bcbdd8e1-688c-4289-ac60-485e92849d62",
-            "lo_title": "Diversity (EN)",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.33
-        },
-        {
-            "object_id": "0e041767-88cd-4154-b60c-492e4b434efc",
-            "lo_title": "Travailler ma mobilité",
-            "lo_start_dt": "2012-06-18T07:00:00Z",
-            "lo_end_dt": "2012-06-20T15:30:00Z",
+            "object_id": "41c6daca-4664-4992-bbf5-118963ae4cf6",
+            "lo_title": "ANGLAIS STEP-UP",
+            "lo_start_dt": "2009-01-01T08:00:00Z",
+            "lo_end_dt": "2009-06-30T16:00:00Z",
             "lo_object_type": "SESN",
-            "lo_hours": 21.00
+            "lo_hours": 60.93
         },
         {
-            "object_id": "bd2377e4-a4d9-4f4d-82d9-4e7932735d2e",
-            "lo_title": "Codes de conduite pour les collaborateurs",
+            "object_id": "d88e5c73-4cdc-4075-aac5-1220c0605060",
+            "lo_title": "Anglais - Micro Learning",
+            "lo_start_dt": "2013-07-02T06:30:00Z",
+            "lo_end_dt": "2013-07-03T22:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 40.00
+        },
+        {
+            "object_id": "0986c06d-57a6-42c1-98eb-14370597d722",
+            "lo_title": "ANGLAIS STEP-UP",
             "lo_start_dt": null,
             "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.33
+            "lo_object_type": "EVNT",
+            "lo_hours": 35.00
         },
         {
-            "object_id": "626d650b-4bce-4336-a9ea-5428bb90b64e",
-            "lo_title": "PARCOURS METIER CAP CAPA CAPL BDDF",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "PRGM",
-            "lo_hours": 336.83
+            "object_id": "f51f6622-70c1-4241-99de-14a2161615f1",
+            "lo_title": "Pilotage Activité - Piloter par les compétences",
+            "lo_start_dt": "2016-12-01T08:00:00Z",
+            "lo_end_dt": "2016-12-01T16:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 7.00
         },
         {
-            "object_id": "ce526cdc-4408-4aef-be4d-56722079f9a1",
-            "lo_title": "Compliance: Conflicts of interest",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.00
-        },
-        {
-            "object_id": "35671ad6-e087-4fe3-ad4c-598526177fa7",
-            "lo_title": "BNP Paribas CSR Overview",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.50
-        },
-        {
-            "object_id": "367ad50c-aa13-43b0-a710-65745a7b630f",
-            "lo_title": "BNPPIP - European Regulation and Sales (français)",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.50
-        },
-        {
-            "object_id": "508e9058-d538-45bd-bb28-6b55dc088123",
-            "lo_title": "Awareness program on BNP Paribas' sector policies",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.50
-        },
-        {
-            "object_id": "7da80186-2f40-4c34-9283-7125857bcaef",
-            "lo_title": "BPLG - Maîtrise de l'outil informatique",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.00
-        },
-        {
-            "object_id": "30a257ec-bb01-45d6-960b-744b9bb49460",
-            "lo_title": "Appraisal Interview: Formulating criticism - Giving praise and compliments",
+            "object_id": "29504245-ba21-4da4-84b5-15413c8e0fc7",
+            "lo_title": "CS - Fundamentals of Financial Analysis for Corporates",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "CRSE",
             "lo_hours": 0.75
         },
         {
-            "object_id": "54438bbd-24c2-4e63-8537-8a94d5437cab",
-            "lo_title": "My Development - Introduzione",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "VID ",
-            "lo_hours": 0.00
-        },
-        {
-            "object_id": "e67aa1f6-3660-48ae-96f7-8c3cd73a3419",
-            "lo_title": "Risicobewustzijn",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 1.00
-        },
-        {
-            "object_id": "dfc2d3fb-ea52-45ab-a6ec-8eeb05f17a26",
-            "lo_title": "6 compétences clés pour réussir en contexte interculturel",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.75
-        },
-        {
-            "object_id": "c645d165-490b-4874-8a09-8f27faac7029",
-            "lo_title": "Appraisal Interview: Quiz",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.33
-        },
-        {
-            "object_id": "2e55cdf8-dd47-489f-a4af-9d39fecb7897",
-            "lo_title": "NCS eTraining",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 133.00
-        },
-        {
-            "object_id": "56cd82c2-92d6-4318-97bd-9e21a8624a61",
-            "lo_title": "Travel Security Online Learning - OLD",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 1.00
-        },
-        {
-            "object_id": "f66faf9e-6b2e-4bc9-889c-a78aabe62866",
-            "lo_title": "AAA - Fixation des objectifs",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.33
-        },
-        {
-            "object_id": "0c64dd29-ede9-462d-9d32-ab0bada9fa73",
-            "lo_title": "IS - Deals Monitoring",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.83
-        },
-        {
-            "object_id": "db7e4868-a3c3-4ac2-ac11-bc4f9afcd1a0",
-            "lo_title": "Les garanties",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.75
-        },
-        {
-            "object_id": "6264a50c-0dee-4491-b01b-be1a86f0c5a5",
-            "lo_title": "CIB - Financial Crime Bribery and Corruption UK",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 0.50
-        },
-        {
-            "object_id": "af28d40f-b840-434b-92e8-c3e2ad831b1f",
+            "object_id": "feeb235d-a2a7-4d55-b306-17d15d88e1bd",
             "lo_title": "Embargoes and financial sanctions 2015",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "PRGM",
-            "lo_hours": 5.83
+            "lo_hours": 1.00
         },
         {
-            "object_id": "411903eb-73e5-4e64-9126-c5798fa6d5c5",
-            "lo_title": "FXLM Principles and Guidelines",
+            "object_id": "381fd1ef-37cf-4422-afd4-18ccf1cd7178",
+            "lo_title": "(Conformité) - Sécurité financière - Sensibilisation - Sanctions financières et Embargos 2016",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "CRSE",
             "lo_hours": 0.50
         },
         {
-            "object_id": "08d0ad57-9363-4244-927f-c604326b61b3",
-            "lo_title": "SWIFT: Your guide to the securities markets",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 1.00
-        },
-        {
-            "object_id": "f8b9b6e5-9950-4aa4-8c2e-d235469b960d",
-            "lo_title": "Personenbelasting Aj. 2012",
-            "lo_start_dt": null,
-            "lo_end_dt": null,
-            "lo_object_type": "CRSE",
-            "lo_hours": 4.00
-        },
-        {
-            "object_id": "7b3f7c7a-6e87-4255-9379-d6315c20b695",
-            "lo_title": "HR Pathway: The Balancing Act",
-            "lo_start_dt": "2015-05-12T08:00:00Z",
-            "lo_end_dt": "2015-05-13T16:00:00Z",
+            "object_id": "28ce95d8-4647-46b8-a9da-1b50c34f75a4",
+            "lo_title": "CONDUITE REUNION DANS  PROJETS",
+            "lo_start_dt": "2011-10-03T08:00:00Z",
+            "lo_end_dt": "2011-10-04T16:00:00Z",
             "lo_object_type": "SESN",
-            "lo_hours": 16.00
+            "lo_hours": 14.00
         },
         {
-            "object_id": "2afc25ac-48a1-4cd5-9f1d-d6d23ca1cffa",
-            "lo_title": "Abusi di Mercato: sensibilizzazione",
+            "object_id": "4ede5642-8585-47ab-8d0a-1ddd3eee6f0a",
+            "lo_title": "(Conformité) - Sécurité Financière - Sensibilisation - Les fondamentaux de la Lutte Contre le Blanchiment de capitaux et le Financement du Terrorisme",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "CRSE",
             "lo_hours": 0.83
         },
         {
-            "object_id": "4ee50daf-00df-47a5-afed-d9445dda391d",
-            "lo_title": "Financial sanctions and Embargoes (English)",
+            "object_id": "ea1e9bcf-77fe-4713-9eba-20bfb80e4fd6",
+            "lo_title": "EPI cheminements",
+            "lo_start_dt": "2010-03-22T08:00:00Z",
+            "lo_end_dt": "2010-03-22T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 1.10
+        },
+        {
+            "object_id": "9227f818-c386-4c26-a5f1-211368428a5f",
+            "lo_title": "My Propert-e learning : Plan de Prevention 1 - Bien comprendre le cadre reglementaire",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.17
+        },
+        {
+            "object_id": "e357f156-ffc8-4903-9094-2256748ed755",
+            "lo_title": "(COMPL) Market integrity",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.67
+        },
+        {
+            "object_id": "444b9c10-2b16-4fc3-b3b1-269e2dfc3f00",
+            "lo_title": "RH - Protection des données personnelles - Sensibilisation",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.50
+        },
+        {
+            "object_id": "ea0c7965-8908-4e82-9f4b-2828563271c7",
+            "lo_title": "Writing for the screen",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.07
+        },
+        {
+            "object_id": "6726aa9c-867a-43f2-9841-28494bfda937",
+            "lo_title": "Business impacts for BNP Paribas",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "MTRL",
+            "lo_hours": 0.10
+        },
+        {
+            "object_id": "12a7177a-8583-4dff-8a01-28bed0d24cca",
+            "lo_title": "Pilotage Activité - Piloter l'activité avec les Achats",
+            "lo_start_dt": "2016-11-25T13:00:00Z",
+            "lo_end_dt": "2016-11-25T16:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 3.50
+        },
+        {
+            "object_id": "c4bbf356-749f-4bc2-8e93-2aa790951029",
+            "lo_title": "Equipier de première intervention (EPI)",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 1.25
+        },
+        {
+            "object_id": "f67010f3-8163-49c1-91a8-2adbfa9664b8",
+            "lo_title": "PF - Blanchiment et fraude -",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.75
+        },
+        {
+            "object_id": "11472e39-98ab-4f9c-9ea2-2b5a2c71db51",
+            "lo_title": "(Compliance) Financial Sanctions and Embargoes - Awareness - 2017",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 2.67
+        },
+        {
+            "object_id": "853839e5-52aa-4c98-b1f6-2b9225ddb183",
+            "lo_title": "(Conformité) Marchés d'instruments financiers 2 (MIF2) - Sensibilisation",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.75
+        },
+        {
+            "object_id": "e9a3bef2-f7f8-4460-b122-2bba7beb5237",
+            "lo_title": "Know Your Data - Module 1 (French)",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.50
+        },
+        {
+            "object_id": "4611124f-3973-4d74-b8bc-30696b33d3b9",
+            "lo_title": "Continuite IT_FR",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.33
+        },
+        {
+            "object_id": "f5c03269-4995-4b69-a847-30c07adfa8f9",
+            "lo_title": "Pilotage Activité - Les incontournables RH pour piloter une activité",
+            "lo_start_dt": "2016-09-22T06:30:00Z",
+            "lo_end_dt": "2016-09-22T10:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 4.00
+        },
+        {
+            "object_id": "a829a1cc-f10a-46fa-92bc-32dd85e96549",
+            "lo_title": "(Compliance) Financial Sanctions & Embargoes - Awareness - 2018",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 1.50
+        },
+        {
+            "object_id": "3201aa72-e163-4a69-9b31-338e11db229a",
+            "lo_title": "Pilotage Activité - Piloter l'activité par les tableaux de bord",
+            "lo_start_dt": "2016-10-20T07:00:00Z",
+            "lo_end_dt": "2016-10-20T15:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "e2be925e-1812-499e-bf71-33f1d45696a4",
+            "lo_title": "Pilotage Activité -  Piloter la relation client-fournisseur",
+            "lo_start_dt": "2017-01-09T08:00:00Z",
+            "lo_end_dt": "2017-02-02T16:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 21.00
+        },
+        {
+            "object_id": "9c9ea7da-b533-43ea-893f-343fb6fa4cc0",
+            "lo_title": "Fonctions Groupe : Surveillance des opérations",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.83
+        },
+        {
+            "object_id": "27888e0c-bc12-459a-b869-3458a3755513",
+            "lo_title": "Developper son assertivite en privilegiant la relation",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.12
+        },
+        {
+            "object_id": "555a1907-ef49-41ce-bd5f-3618e245be73",
+            "lo_title": "Feedback au fil de l'eau",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 2.50
+        },
+        {
+            "object_id": "84f1556d-d938-42d4-8f7f-38b6e9486173",
+            "lo_title": "ACT Program - Cohort n°8 - Louveciennes",
+            "lo_start_dt": "2018-03-05T08:00:00Z",
+            "lo_end_dt": "2018-09-17T16:00:00Z",
+            "lo_object_type": "SLCH",
+            "lo_hours": 30.00
+        },
+        {
+            "object_id": "8c73ed93-c185-45dd-a9a7-3975b48065f6",
+            "lo_title": "Fondamentaux des études  SIT",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "ca3ba237-a0dc-4bf6-847b-39d29854fac4",
+            "lo_title": "Visite des Data Center",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 3.50
+        },
+        {
+            "object_id": "1ee7c970-adb7-4701-b2bb-3a70aa0f220f",
+            "lo_title": "(Conformité) - Sanctions Financières et Embargos - 2018",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.75
+        },
+        {
+            "object_id": "cbb78047-6f3b-4c4f-a89f-3d3ace00d7ff",
+            "lo_title": "anglais STEP UP",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 60.00
+        },
+        {
+            "object_id": "aa946f25-a198-4390-ab69-3ed5cf7a09a3",
+            "lo_title": "Competition Law and You",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 5.50
+        },
+        {
+            "object_id": "e3fde34e-6257-413d-b5b0-3ed81cd923f3",
+            "lo_title": "Se former efficacement : guide du collaborateur",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "FILE",
+            "lo_hours": 0.00
+        },
+        {
+            "object_id": "9a05581d-0889-4fd4-bbab-3f868d154222",
+            "lo_title": "Seguridad en la voz",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 1.00
+        },
+        {
+            "object_id": "74a1c7e5-b6cb-4b82-a41c-41a22778f72a",
+            "lo_title": "Pilotage Activité - Les incontournables RH pour piloter une activité",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 3.50
+        },
+        {
+            "object_id": "1c24c3cb-d415-4904-beb8-434e1083078c",
+            "lo_title": "Fondamentaux des études  SIT",
+            "lo_start_dt": "2016-12-06T08:00:00Z",
+            "lo_end_dt": "2016-12-06T16:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "5bc1dadc-22ec-4d85-beec-46b67c7e5041",
+            "lo_title": "Personal Data Protection: Focus on the GDPR",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.50
+        },
+        {
+            "object_id": "2d392323-5f6e-4341-950b-4773c77d2292",
+            "lo_title": "Sanctions financières et Embargos (French)",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "CRSE",
             "lo_hours": 0.42
         },
         {
-            "object_id": "25fb7279-9971-451e-9dfb-e073ea5b90f0",
-            "lo_title": "APAC - IT Security Annual Awareness Training for 2014",
+            "object_id": "88b8585f-5cb2-490f-a111-4899901f7325",
+            "lo_title": "Manager ses projets",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "ba4b1a18-1a6d-4c11-a3fd-49672d1bc732",
+            "lo_title": "Fonctions Groupe - Nouveau cadre règlementaire et KYC",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.83
+        },
+        {
+            "object_id": "c4b969e4-f151-486e-8c8e-4970d906d757",
+            "lo_title": "(Compliance) - Financial Security - Awareness - Financial sanctions and Embargoes 2016",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 2.00
+        },
+        {
+            "object_id": "cba77b66-2374-4576-8834-4976fe90d45d",
+            "lo_title": "PROGRESSIO ANGLAIS 2010",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 60.00
+        },
+        {
+            "object_id": "8726612a-233a-4fcd-8889-4a1d98c2f50d",
+            "lo_title": "Anglais - Cours Telephone",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 20.00
+        },
+        {
+            "object_id": "26491694-573f-456e-89ed-4a682d9823f2",
+            "lo_title": "Anglais - Micro Learning - 12 mois",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 40.00
+        },
+        {
+            "object_id": "9fc2d941-5d94-4cbd-a723-4aa8151e8cfb",
+            "lo_title": "Formation Elntérim",
+            "lo_start_dt": "2017-06-27T07:00:00Z",
+            "lo_end_dt": "2017-06-29T15:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 22.50
+        },
+        {
+            "object_id": "7416e005-bbe4-4090-9392-4d3b07e063f2",
+            "lo_title": "Compliance - KYC: Un élément majeur d'atténuation des risques liés à l'AML et aux Sanctions - Module clients particuliers",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.75
+        },
+        {
+            "object_id": "d9bb5c52-19be-4a46-80c6-500a65212513",
+            "lo_title": "FORUM PRESENT. QUALITY CENTER",
+            "lo_start_dt": "2008-08-06T08:00:00Z",
+            "lo_end_dt": "2008-08-06T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 3.00
+        },
+        {
+            "object_id": "0b2760a2-bc55-4624-8f94-52eb9491abb5",
+            "lo_title": "Renforcer son assertivité : s'affirmer dans l'échange (Fonctions Groupe)",
+            "lo_start_dt": "2015-10-05T07:00:00Z",
+            "lo_end_dt": "2015-10-06T15:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "d04b879a-4c77-42a8-9c80-536d1b1570c6",
+            "lo_title": "Embargoes and financial sanctions 2015",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 2.00
+        },
+        {
+            "object_id": "51f39e2d-4cf0-4e15-afee-537bc20fc88a",
+            "lo_title": "La formation en questions",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "TEST",
+            "lo_hours": 0.17
+        },
+        {
+            "object_id": "cc61d433-bd2e-4cfe-b2ac-583304be655c",
+            "lo_title": "InTeGrate",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 10.50
+        },
+        {
+            "object_id": "2537a884-adb5-4dca-9878-59228f38eae0",
+            "lo_title": "Pilotage Activité - Piloter par les compétences",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "0a0f13c3-9b83-446a-9d4c-59cf3aac3c76",
+            "lo_title": "Anglais - Cours par téléphone - 5h",
+            "lo_start_dt": "2014-09-12T06:30:00Z",
+            "lo_end_dt": "2014-09-12T11:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 5.00
+        },
+        {
+            "object_id": "916082b1-80b3-42e0-9b66-5b050dbc02a4",
+            "lo_title": "5 ways to kill your dreams: Bel Pesce",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.12
+        },
+        {
+            "object_id": "f59c948e-e1a3-457a-9078-5ba361e34dd1",
+            "lo_title": "Fonctions Groupe - Lutte contre le blanchiment : les essentiels",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 1.67
+        },
+        {
+            "object_id": "275e069e-f737-4ffe-8380-5c6f5398ed06",
+            "lo_title": "Pilotage Activité - Sensibilisation à la gestion des risques IT et Cyber",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 3.50
+        },
+        {
+            "object_id": "79c5f27e-cd85-4e10-beb0-5c74df90b30f",
+            "lo_title": "Conformité : Ethique Professionnelle",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "CRSE",
             "lo_hours": 0.50
         },
         {
-            "object_id": "4f33f2ea-a285-46ec-8176-e1509b4bf094",
-            "lo_title": "Codes de conduite pour les collaborateurs",
+            "object_id": "7a1afe4d-eecd-454e-a898-63ca888bfede",
+            "lo_title": "Clarity ITG - Portlets de Restitution du Pilotage du PA dans Clarity ITG",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "VID ",
+            "lo_hours": 0.12
+        },
+        {
+            "object_id": "94687785-ceeb-4e7b-8aaa-6435851a82fb",
+            "lo_title": "Clarity ITG - Révision d'un plan de budget",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "VID ",
+            "lo_hours": 0.10
+        },
+        {
+            "object_id": "150056f6-7b54-40f8-bcc9-646a06ddf0af",
+            "lo_title": "Launch course",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "SCO ",
+            "lo_hours": 0.00
+        },
+        {
+            "object_id": "2853ebe8-782a-440a-823c-65df0bfecc4c",
+            "lo_title": "(Conformité) - Sanctions financières et Embargos - Sensibilisation - 2017",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.67
+        },
+        {
+            "object_id": "d74ae373-c5aa-4b04-bb09-6adcbfc2222d",
+            "lo_title": "Digital Common Sense",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "MTRL",
+            "lo_hours": 0.27
+        },
+        {
+            "object_id": "e8438d1d-0892-47f7-ad5f-6ce09e352a16",
+            "lo_title": "Conformite groupe : Fraude : tous vigilants",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.25
+        },
+        {
+            "object_id": "4d0b6989-f090-4a2d-928b-6cf498bc8eb6",
+            "lo_title": "Se former de manière efficace",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.08
+        },
+        {
+            "object_id": "9b7f7216-51c9-40ca-a2d7-6ebfa8dc30f4",
+            "lo_title": "Qu'est-ce que la continuité d'activité ?",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "CRSE",
             "lo_hours": 0.33
         },
         {
-            "object_id": "ba9ca09a-ee97-44ea-8fec-f145ec6f37e8",
-            "lo_title": "HR Pathway: The Balancing Act",
+            "object_id": "2606a998-a173-4c5d-9bd4-701882c2aca5",
+            "lo_title": "Videocasts - 3 tips to eliminate clutter",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.00
+        },
+        {
+            "object_id": "7a65d764-e3ae-4c24-83a4-75b798f001bf",
+            "lo_title": "\" Impro-Négo \" Négociation raisonnée de Harvard et techniques d'improvisation théâtrale - FONCTIONNELS",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "EVNT",
-            "lo_hours": 16.00
+            "lo_hours": 14.00
         },
         {
-            "object_id": "ddd7c734-c25c-4a54-9f06-f6711c5c22af",
-            "lo_title": "How to make stress your friend (Uploaded video)",
+            "object_id": "78bbc5f9-9cd2-4cda-9ef4-768e21505793",
+            "lo_title": "Clarity ITG-Web",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "481d8853-4bbe-4c47-afe8-7b3090eb2971",
+            "lo_title": "GLOBAL ENGLISH 2010",
+            "lo_start_dt": "2011-12-15T08:00:00Z",
+            "lo_end_dt": "2011-12-30T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 30.00
+        },
+        {
+            "object_id": "b464c6b0-37f9-4a28-8867-7d1b37031c34",
+            "lo_title": "To innovate, knock your ideas about",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.75
+        },
+        {
+            "object_id": "fa02f346-ddc5-4caa-b2e0-7ed63ed03e9d",
+            "lo_title": "Believing",
             "lo_start_dt": null,
             "lo_end_dt": null,
             "lo_object_type": "VID ",
+            "lo_hours": 0.05
+        },
+        {
+            "object_id": "3745dc68-9f42-4f21-870d-822d67b4df4e",
+            "lo_title": "(Compliance) - Financial Security - Awareness - The Basic rules for the Anti-Money Laundering / Combating the Financing of Terrorism",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 3.33
+        },
+        {
+            "object_id": "97b40f37-ea7d-4132-ba47-88cff59cb199",
+            "lo_title": "2018 Ethics and the Spirit of Compliance Part 1",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.42
+        },
+        {
+            "object_id": "c811232e-87b6-4ce3-85ed-89ecc6b83e0f",
+            "lo_title": "CONDUITE REUNION DANS  PROJETS",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "022ce64c-fc7a-4fbf-891c-8a8fc753236b",
+            "lo_title": "Clarity ITG-Open Workbench",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 3.50
+        },
+        {
+            "object_id": "f4a66768-df21-4475-aac3-8bb98ddeb26d",
+            "lo_title": "Exprimer son leadership",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "d71a8795-ca75-4b56-b903-8d00d3334b69",
+            "lo_title": "ALM Octane EN e-learning module",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.33
+        },
+        {
+            "object_id": "6e5c87c5-a904-4d01-8c87-8e38009d659a",
+            "lo_title": "Visite du 13'Util",
+            "lo_start_dt": "2016-07-07T12:30:00Z",
+            "lo_end_dt": "2016-07-07T14:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 1.50
+        },
+        {
+            "object_id": "120b6fe6-8d14-4ffe-a513-8ed2df797c77",
+            "lo_title": "InTeGrate",
+            "lo_start_dt": "2016-06-16T06:45:00Z",
+            "lo_end_dt": "2016-06-16T15:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 6.75
+        },
+        {
+            "object_id": "60f97cb8-a992-447d-b731-8f48053934d4",
+            "lo_title": "Visite du 13'Util",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 1.50
+        },
+        {
+            "object_id": "fad62e7b-055a-4310-9eba-905856516b15",
+            "lo_title": "Know Your Data - Module 1",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 6.00
+        },
+        {
+            "object_id": "2335238e-97ff-4357-a788-91123540cc88",
+            "lo_title": "Conformité : Les conflits d'intérêts",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.75
+        },
+        {
+            "object_id": "dac26aa4-6e60-4c95-ba83-91bfd88fe149",
+            "lo_title": "Clarity ITG-Open Workbench",
+            "lo_start_dt": "2016-06-21T12:00:00Z",
+            "lo_end_dt": "2016-06-21T15:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 3.00
+        },
+        {
+            "object_id": "80446a0f-3b1b-4ed5-9182-921c6ebfb685",
+            "lo_title": "Equipier de première intervention (EPI)",
+            "lo_start_dt": "2009-02-27T08:00:00Z",
+            "lo_end_dt": "2009-02-27T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 1.00
+        },
+        {
+            "object_id": "65aae61f-f31f-4f51-bcfc-928f29daecfd",
+            "lo_title": "Anglais - Micro Learning - 12 mois",
+            "lo_start_dt": "2015-02-20T08:00:00Z",
+            "lo_end_dt": "2015-02-28T13:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 40.00
+        },
+        {
+            "object_id": "9e4130da-a07a-45e7-b691-9348f0f9965e",
+            "lo_title": "(Compliance) - Professional Ethics - Awareness",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 3.75
+        },
+        {
+            "object_id": "76592a79-1d94-44a0-ba1b-9749f53db341",
+            "lo_title": "Pilotage Activité - Piloter l'activité par les tableaux de bord",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "e2e13062-017a-4e7d-b52e-9f52d4eb27c8",
+            "lo_title": "Flex-Office et Télétravail",
+            "lo_start_dt": "2017-07-10T07:30:00Z",
+            "lo_end_dt": "2017-07-10T15:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "e80dc98d-0430-4ec4-b5fb-9fcb02e301af",
+            "lo_title": "PROGRESSIO ANGLAIS 2010",
+            "lo_start_dt": "2010-06-15T08:00:00Z",
+            "lo_end_dt": "2010-06-30T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 30.00
+        },
+        {
+            "object_id": "8277d715-d81b-4323-bcfb-a26587ac3ad5",
+            "lo_title": "Formation Elntérim",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 21.00
+        },
+        {
+            "object_id": "d58df843-2834-47fb-a277-a4bded14c847",
+            "lo_title": "Code of Conduct awareness",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 1.50
+        },
+        {
+            "object_id": "cfc3a7bb-f25e-443e-9fa6-a53577f209e9",
+            "lo_title": "Pilotage Activité -  Piloter la relation client-fournisseur",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 21.00
+        },
+        {
+            "object_id": "aa45a19d-dfc8-4085-b3b1-a66669faaf85",
+            "lo_title": "Prévention des Risques Psychosociaux (RPS)",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.42
+        },
+        {
+            "object_id": "f84b4d14-59e6-43ef-98a4-a8a15b1d6642",
+            "lo_title": "Pilotage Activité - Sensibilisation à la gestion des risques IT et Cyber",
+            "lo_start_dt": "2016-11-25T08:00:00Z",
+            "lo_end_dt": "2016-11-25T11:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 3.50
+        },
+        {
+            "object_id": "ee2c44cf-734c-4b39-9cda-a91b1c6ab31d",
+            "lo_title": "Embargoes and financial sanctions 2015",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 2.42
+        },
+        {
+            "object_id": "366a1045-7422-4543-8662-a9f4a872057b",
+            "lo_title": "My Learning - TPM / TA",
+            "lo_start_dt": "2015-03-02T08:00:00Z",
+            "lo_end_dt": "2015-03-03T16:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "473eb8a6-2160-4574-b92e-ada048a243ba",
+            "lo_title": "(Compliance) - KYC: A key risk mitigant for AML and Sanctions",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 0.75
+        },
+        {
+            "object_id": "81e4ccc8-4c18-4c1a-9625-afded266905e",
+            "lo_title": "Clarity ITG - Création d'un plan de budget",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "VID ",
+            "lo_hours": 0.10
+        },
+        {
+            "object_id": "5b57833f-e850-4244-8efb-b165d7d32ccb",
+            "lo_title": "Let's get Digital",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 1.57
+        },
+        {
+            "object_id": "34c8aca0-ebc6-4901-bc03-b39c6f17fb78",
+            "lo_title": "Compliance : Automatic Exchange of Information (AEOI) - 2015",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 2.92
+        },
+        {
+            "object_id": "2891e86b-89f1-4759-9d07-b5b49e87067a",
+            "lo_title": "My Learning - TPM / TA",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "e7c3a7e7-8b49-494a-919b-b95a0a883a6d",
+            "lo_title": "Argumenter : un levier pour convaincre",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "132736fa-1cc9-49ba-b060-bcc5b625e7c4",
+            "lo_title": "The History of the Internet",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "MTRL",
+            "lo_hours": 0.07
+        },
+        {
+            "object_id": "4c9d7cb7-96f7-453b-9345-bd3c0c8f1d69",
+            "lo_title": " Правова регламентація конкуренції Рекомендовані та нерекомендовані дії",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "MTRL",
+            "lo_hours": 0.00
+        },
+        {
+            "object_id": "c9f19252-d37b-45d9-a4f8-bde552c8f35a",
+            "lo_title": "Manager ses projets",
+            "lo_start_dt": "2010-12-06T08:00:00Z",
+            "lo_end_dt": "2010-12-07T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "a40931cd-4fb4-4119-961f-be8297d3fa21",
+            "lo_title": "Social Media",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "MTRL",
+            "lo_hours": 1.00
+        },
+        {
+            "object_id": "214f08a0-d4a5-4f17-9ee7-c02dae95e4f0",
+            "lo_title": "IT Academy - Gestion opérationnelle des risques de pilotage IT",
+            "lo_start_dt": "2018-10-02T07:15:00Z",
+            "lo_end_dt": "2018-10-02T15:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "1504126e-6553-4c40-a1ce-c7604b3b9cca",
+            "lo_title": "(Conformité) - Ethique Professionnelle - Sensibilisation",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.42
+        },
+        {
+            "object_id": "b9eda9c1-6066-4489-87c5-c8ebc54be986",
+            "lo_title": "A kinder, gentler philosophy of success: Alain de Botton",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
             "lo_hours": 0.25
+        },
+        {
+            "object_id": "c8537166-2d09-4697-a7cd-c91a266c3455",
+            "lo_title": "Clarity ITG-Web",
+            "lo_start_dt": "2016-06-21T07:00:00Z",
+            "lo_end_dt": "2016-06-21T10:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 3.00
+        },
+        {
+            "object_id": "cf802e53-c3ff-4f76-9718-cc640eb6122d",
+            "lo_title": "anglais STEP UP",
+            "lo_start_dt": "2009-01-01T08:00:00Z",
+            "lo_end_dt": "2009-06-30T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 60.00
+        },
+        {
+            "object_id": "c0032173-4f44-4d0a-a15e-cd8955d3ff21",
+            "lo_title": "Clarity ITG-Open Workbench",
+            "lo_start_dt": "2016-09-20T12:00:00Z",
+            "lo_end_dt": "2016-09-20T15:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 3.00
+        },
+        {
+            "object_id": "22573813-83f2-49c5-aa78-ce995ccabea8",
+            "lo_title": "Pilotage Activité - Piloter l'activité avec les Achats",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 3.50
+        },
+        {
+            "object_id": "446117dd-1269-4e8a-a42b-ceb3d0f3b893",
+            "lo_title": "Anglais - Micro Learning",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 20.00
+        },
+        {
+            "object_id": "5529ed63-d740-42d2-aef4-cf9b8ac5f6e2",
+            "lo_title": "Comment mener efficacement vos ateliers participatifs",
+            "lo_start_dt": "2017-11-27T08:30:00Z",
+            "lo_end_dt": "2017-11-27T16:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "5214b099-3aad-44ac-b5cb-d2602a1ecc99",
+            "lo_title": "Embargoes and financial sanctions 2015",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 2.08
+        },
+        {
+            "object_id": "37b957a6-0a16-4ce0-8137-d40b472e8a8e",
+            "lo_title": "FORUM PRESENT. QUALITY CENTER",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 3.00
+        },
+        {
+            "object_id": "fb5f3e15-5cf9-4254-bfe0-d508c4954af2",
+            "lo_title": "Flex-Office et Télétravail",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "ab14fcd0-2263-4697-ba0a-da99779aa795",
+            "lo_title": "(Compliance) : Anti Money Laundering and Counter Terrorist Financing (AML/CTF) - Awareness 2017",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "PRGM",
+            "lo_hours": 2.33
+        },
+        {
+            "object_id": "18c0a78e-b7cd-456c-a5b5-dac03df56fea",
+            "lo_title": "Exprimer son leadership",
+            "lo_start_dt": "2012-12-17T08:00:00Z",
+            "lo_end_dt": "2012-12-18T16:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "0928b94c-3982-40e6-8662-dbc1261e0f36",
+            "lo_title": "Comment mener efficacement vos ateliers participatifs",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 7.00
+        },
+        {
+            "object_id": "cd589095-a624-46b2-bd1d-dc90d0664e4a",
+            "lo_title": "EPI cheminements",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 1.00
+        },
+        {
+            "object_id": "d2ed2757-6b69-45da-a22b-dd84db69b78c",
+            "lo_title": "Anglais - Cours par téléphone - 5h",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 5.00
+        },
+        {
+            "object_id": "1bda28d0-ae5e-4f2e-a2bb-df086b3a23af",
+            "lo_title": "Pilotage Activité - Les incontournables RH pour piloter une activité",
+            "lo_start_dt": "2016-10-19T06:30:00Z",
+            "lo_end_dt": "2016-10-19T10:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 4.00
+        },
+        {
+            "object_id": "20634863-cd00-4475-8d86-dfc99d325ed3",
+            "lo_title": "GLOBAL ENGLISH 2010",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 60.00
+        },
+        {
+            "object_id": "529991b8-1e4c-433d-9275-e5f6d711e773",
+            "lo_title": "Anglais - Cours Telephone",
+            "lo_start_dt": "2013-07-01T07:00:00Z",
+            "lo_end_dt": "2013-07-01T19:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 10.00
+        },
+        {
+            "object_id": "b4ed5c4b-4b1b-49e3-be5d-e66c7eabfc88",
+            "lo_title": "Compliance - KYC: Un élément majeur d'atténuation des risques liés à l'AML et aux Sanctions - Module clients professionels et entreprises",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.75
+        },
+        {
+            "object_id": "25bbaba0-e2a2-42cd-abcc-e7b2221a8580",
+            "lo_title": "Le Droit de la Concurrence et Vous",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.50
+        },
+        {
+            "object_id": "647b4a81-7424-4469-9fa6-e846784387d8",
+            "lo_title": "Collaborative Work",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "MTRL",
+            "lo_hours": 0.13
+        },
+        {
+            "object_id": "cc2413ce-eb58-467a-9b8e-f3ed6a1720da",
+            "lo_title": "CONCEVOIR ET ANIMER UN DIAPORAMA EN FORMATION",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.50
+        },
+        {
+            "object_id": "618606c3-37af-4881-9585-f510fb0b660b",
+            "lo_title": "Argumenter : un levier pour convaincre",
+            "lo_start_dt": "2014-09-29T07:00:00Z",
+            "lo_end_dt": "2014-09-30T15:30:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 14.00
+        },
+        {
+            "object_id": "3e66248e-91cc-483c-b301-f592c1b92d5a",
+            "lo_title": "Serious Game Cyberdefense (New version April 2018)",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.50
+        },
+        {
+            "object_id": "6a218ad9-e80a-49f6-847b-f5cf82f731f2",
+            "lo_title": "ePerformance",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "EVNT",
+            "lo_hours": 21.00
+        },
+        {
+            "object_id": "7aac93af-d502-443a-a564-f6b5571f913a",
+            "lo_title": "ePerformance",
+            "lo_start_dt": "2008-09-15T08:00:00Z",
+            "lo_end_dt": "2008-09-17T16:00:00Z",
+            "lo_object_type": "SESN",
+            "lo_hours": 21.00
+        },
+        {
+            "object_id": "e4c84c4d-8009-4d91-94da-fbe43e916ba3",
+            "lo_title": "(Conformité) : Lutte Contre le Blanchiment d'argent et le Financement du Terrorisme (LCB / FT)  - Sensibilisation 2017",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.67
+        },
+        {
+            "object_id": "4f26b48f-15e2-4798-a2f1-fe49c7dab54d",
+            "lo_title": "My Development pour collaborateurs - Saison 1",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
+            "lo_object_type": "CRSE",
+            "lo_hours": 0.33
         }
-    ],
-    "@odata.context": "https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_training"
+    ]
 }

@@ -2,9 +2,9 @@
   "@odata.context": "https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/$metadata#vw_rpt_user",
   "value": [
     {
-      "user_ref": "cesadmin",
-      "user_id": 1,
-      "user_language_id": 2
+      "user_ref": "359403",
+      "user_id": 77016,
+      "user_language_id": 13
     }
   ]
 }
