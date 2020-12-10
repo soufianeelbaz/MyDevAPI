@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Profile("MYDEV_REAL")
+@Profile("!MYDEV_MOCK")
 @Configuration
 public class MyDevApiConfiguration {
 

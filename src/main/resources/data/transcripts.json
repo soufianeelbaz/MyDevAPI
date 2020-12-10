@@ -546,19 +546,6 @@
       "user_lo_comp_dt": null,
       "training_purpose": null,
       "transc_user_id": 1
-    },
-    {
-      "transc_object_id": "a14668b7-51c0-4412-96db-fcb9dfe07f3c",
-      "user_lo_status_group_id": 12,
-      "is_latest_reg_num": 1,
-      "is_archive": 0,
-      "is_removed": false,
-      "is_standalone": true,
-      "user_lo_reg_dt": "2012-04-02T11:40:44.387Z",
-      "user_lo_min_due_date": null,
-      "user_lo_comp_dt": null,
-      "training_purpose": null,
-      "transc_user_id": 1
     }
   ]
 }

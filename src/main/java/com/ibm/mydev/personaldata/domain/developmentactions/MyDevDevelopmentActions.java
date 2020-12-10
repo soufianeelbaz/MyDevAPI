@@ -1,12 +1,14 @@
 package com.ibm.mydev.personaldata.domain.developmentactions;
 
 import com.google.common.collect.Lists;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.IMyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.MyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -24,10 +26,10 @@ public class MyDevDevelopmentActions implements DevelopmentActions {
             .getLogger(MyDevDevelopmentActions.class);
 
     @Autowired
-    public MyDevApiClient myDevApiClient;
+    public IMyDevApiClient myDevApiClient;
 
-    @Autowired
-    public MyDevApiConfiguration myDevApiConfiguration;
+    @Value("${mydev.csod.api.chunk.url.size}")
+    public int chunkUrlSize;
 
     private CompletableFuture<MyDevTranscriptView> getUserTranscriptsAsync(MyDevUserView user, Integer year) {
         CompletableFuture<MyDevTranscriptView> userTranscripts = CompletableFuture.supplyAsync(() -> myDevApiClient.getTranscriptData(user.getValue().get(0).getId(), year));
@@ -41,7 +43,7 @@ public class MyDevDevelopmentActions implements DevelopmentActions {
                     .map(transcriptItem -> transcriptItem.getTrainingId())
                     .filter(trainingId -> trainingId != null && !trainingId.isEmpty())
                     .collect(Collectors.toList());
-            return Lists.partition(objectIds, myDevApiConfiguration.chunkUrlSize);
+            return Lists.partition(objectIds, chunkUrlSize);
         } else {
             return Collections.emptyList();
         }

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
-@Profile("!MYDEV_REAL")
+@Profile("MYDEV_MOCK")
 @Service
 public class MyDevMockApiClient implements IMyDevApiClient {
 

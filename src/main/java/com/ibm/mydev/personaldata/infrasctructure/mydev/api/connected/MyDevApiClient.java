@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Profile("MYDEV_REAL")
+@Profile("!MYDEV_MOCK")
 @Service
 public class MyDevApiClient implements IMyDevApiClient {
 
