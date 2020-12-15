@@ -14,11 +14,18 @@ public class MyDevClientHttpLogInterceptor implements ClientHttpRequestIntercept
     private static Logger LOGGER = LoggerFactory
             .getLogger(MyDevClientHttpLogInterceptor.class);
 
+    private static final String ERROR_400 = "CSOD Bad Request.";
+    private static final String ERROR_401 = "CSOD Unauthorized.";
+    private static final String ERROR_404 = "CSOD Not Found.";
+    private static final String ERROR_429 = "CSOD Too many requests.";
+    private static final String ERROR_50_ = "CSOD Internal Server Error.";
+
     @Override
     public ClientHttpResponse intercept(
             HttpRequest request, byte[] body,
             ClientHttpRequestExecution execution) throws IOException {
         ClientHttpResponse response = execution.execute(request, body);
+
         logRequestAndResponseDetails(request, response);
         return response;
     }
@@ -28,6 +35,38 @@ public class MyDevClientHttpLogInterceptor implements ClientHttpRequestIntercept
         LOGGER.info("Request Method: {}", request.getMethod());
         LOGGER.info("Request URI: {}", request.getURI());
         LOGGER.info("Response status code: {}", response.getStatusCode());
-        LOGGER.info("Response status text: {} {}", response.getStatusText(), System.getProperty("line.separator"));
+        LOGGER.info("Response status text: {} {}", getCSODHttpStatusMessage(response), System.getProperty("line.separator"));
+    }
+
+    private String getCSODHttpStatusMessage(ClientHttpResponse response) throws IOException {
+        int status = response.getRawStatusCode();
+        String message = null;
+        if (status != 200) {
+            switch (status) {
+                case 400:
+                    message = ERROR_400;
+                    break;
+                case 401:
+                    message = ERROR_401;
+                    break;
+                case 404:
+                    message = ERROR_404;
+                    break;
+                case 429:
+                    message = ERROR_429;
+                    break;
+                case 500:
+                case 503:
+                case 504:
+                    message = ERROR_50_;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (message == null) {
+            message = response.getStatusText();
+        }
+        return message;
     }
 }

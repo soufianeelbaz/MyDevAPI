@@ -1,6 +1,9 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.interceptor;
 
-import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.MyDevTokenService;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.MyDevApiClient;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.IMyDevTokenService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
@@ -13,9 +16,12 @@ import java.io.IOException;
 
 public class MyDevClientHttpOAuthInterceptor implements ClientHttpRequestInterceptor {
 
-    private MyDevTokenService tokenService;
+    private static Logger LOGGER = LoggerFactory
+            .getLogger(MyDevClientHttpOAuthInterceptor.class);
 
-    public MyDevClientHttpOAuthInterceptor(MyDevTokenService tokenService) {
+    private IMyDevTokenService tokenService;
+
+    public MyDevClientHttpOAuthInterceptor(IMyDevTokenService tokenService) {
         this.tokenService = tokenService;
     }
 

@@ -24,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Profile("MYDEV_REAL")
+@Profile("!MYDEV_MOCK")
 @Service
 public class MyDevApiClient implements IMyDevApiClient {
 
@@ -53,13 +53,17 @@ public class MyDevApiClient implements IMyDevApiClient {
     private static final String CLOSING_PARENTHESE = ")";
 
     @Value("${mydev.csod.api}")
-    private String baseUrl;
+    public String baseUrl;
+
     @Value("${mydev.csod.api.endpoints.trainings}")
     public String trainings;
+
     @Value("${mydev.csod.api.endpoints.trainingsLocal}")
     public String trainingsLocal;
+
     @Value("${mydev.csod.api.endpoints.transcripts}")
     public String transcripts;
+
     @Value("${mydev.csod.api.endpoints.users}")
     public String users;
 
@@ -191,23 +195,3 @@ public class MyDevApiClient implements IMyDevApiClient {
         return OPENING_PARENTHESE + filters + CLOSING_PARENTHESE;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

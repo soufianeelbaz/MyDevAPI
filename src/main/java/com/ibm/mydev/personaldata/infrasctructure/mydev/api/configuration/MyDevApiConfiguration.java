@@ -17,15 +17,12 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Profile("MYDEV_REAL")
+@Profile("!MYDEV_MOCK")
 @Configuration
 public class MyDevApiConfiguration {
 
     @Value("${mydev.csod.api.timeout:30}")
     public int timeout;
-
-    @Value("${mydev.csod.api.chunk.url.size}")
-    public int chunkUrlSize;
 
     @Bean
     public RestTemplateCustomizer customRestTemplateCustomizer() {

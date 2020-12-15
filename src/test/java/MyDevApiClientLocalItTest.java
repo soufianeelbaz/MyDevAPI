@@ -1,4 +1,3 @@
-import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.MyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.MyDevTokenService;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
@@ -9,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.*;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.*;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
@@ -20,9 +20,6 @@ import static org.mockito.Mockito.eq;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MyDevApiClientLocalItTest {
-
-    @Mock
-    MyDevApiConfiguration apiConfiguration;
 
     @Mock
     RestTemplate restTemplate;
@@ -42,16 +39,13 @@ public class MyDevApiClientLocalItTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        /*apiConfiguration.baseUrl = "https://hr-bnpparibas-stg.csod.com/";
-        apiConfiguration.authentication = "/services/api/oauth2/token";
-        apiConfiguration.users = "services/api/x/odata/api/views/vw_rpt_user";
-        apiConfiguration.transcripts = "services/api/x/odata/api/views/vw_rpt_transcript";
-        apiConfiguration.trainings = "services/api/x/odata/api/views/vw_rpt_training";
-        apiConfiguration.trainingsLocal = "services/api/x/odata/api/views/vw_rpt_training_title_local";*/
+        ReflectionTestUtils.setField(sut, "baseUrl", "https://hr-bnpparibas-stg.csod.com/");
     }
 
     @Test
     public void testGetUserData() {
+
+        ReflectionTestUtils.setField(sut, "users", "services/api/x/odata/api/views/vw_rpt_user");
 
         Mockito.when(tokenService.getAccessToken()).thenReturn("TEST_TOKEN");
 
@@ -89,6 +83,8 @@ public class MyDevApiClientLocalItTest {
     @Test
     public void testGetTranscriptData() {
 
+        ReflectionTestUtils.setField(sut, "transcripts", "services/api/x/odata/api/views/vw_rpt_transcript");
+
         MyDevTranscriptView mockedTranscriptView = new MyDevTranscriptView();
 
         List<TranscriptItem> transcriptItems = new ArrayList<>();
@@ -124,6 +120,8 @@ public class MyDevApiClientLocalItTest {
     @Test
     public void testGetTrainingData() {
 
+        ReflectionTestUtils.setField(sut, "trainings", "services/api/x/odata/api/views/vw_rpt_training");
+
         MyDevTrainingView mockedTrainingView = new MyDevTrainingView();
 
         List<TrainingItem> trainingItems = new ArrayList<>();
@@ -150,6 +148,8 @@ public class MyDevApiClientLocalItTest {
 
     @Test
     public void testGetTrainingLocalData() {
+
+        ReflectionTestUtils.setField(sut, "trainingsLocal", "services/api/x/odata/api/views/vw_rpt_training_title_local");
 
         MyDevTrainingLocalView mockedTrainingLocalView = new MyDevTrainingLocalView();
 
