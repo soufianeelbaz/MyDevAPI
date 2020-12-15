@@ -1,17 +1,13 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected;
 
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.IMyDevApiClient;
-import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.MyDevTokenService;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
-import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingItem.TrainingReportAttributes;
-import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingLocalItem.TrainingLocalReportAttributes;
-import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TranscriptItem.TranscriptReportAttributes;
-import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.UserItem.UserReportAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -52,8 +48,20 @@ public class MyDevApiClient implements IMyDevApiClient {
     private static final String OPENING_PARENTHESE = "(";
     private static final String CLOSING_PARENTHESE = ")";
 
-    @Autowired
-    public MyDevApiConfiguration apiConfiguration;
+    @Value("${mydev.csod.api}")
+    public String baseUrl;
+
+    @Value("${mydev.csod.api.endpoints.trainings}")
+    public String trainings;
+
+    @Value("${mydev.csod.api.endpoints.trainingsLocal}")
+    public String trainingsLocal;
+
+    @Value("${mydev.csod.api.endpoints.transcripts}")
+    public String transcripts;
+
+    @Value("${mydev.csod.api.endpoints.users}")
+    public String users;
 
     @Autowired
     @Qualifier("MyDevRestTemplate")
@@ -111,9 +119,9 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     private String getUsersEndpointUri(String uid) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.users)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + users)
                 .queryParam(PARAM_FILTER, buildUserFilterParams(uid))
-                .queryParam(PARAM_SELECT, Arrays.stream(UserReportAttributes.values())
+                .queryParam(PARAM_SELECT, Arrays.stream(UserItem.UserReportAttributes.values())
                         .map(attr -> attr.getAttribute())
                         .collect(Collectors.joining(",")));
         return builder.toUriString();
@@ -130,9 +138,9 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     private String getTranscriptsEndpointUri(Integer id, Integer year) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.transcripts)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + transcripts)
                 .queryParam(PARAM_FILTER, buildTranscriptFilterParams(id, year))
-                .queryParam(PARAM_SELECT, Arrays.stream(TranscriptReportAttributes.values())
+                .queryParam(PARAM_SELECT, Arrays.stream(TranscriptItem.TranscriptReportAttributes.values())
                         .map(attr -> attr.getAttribute())
                         .collect(Collectors.joining(",")));
         return builder.toUriString();
@@ -146,9 +154,9 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     private String getTrainingsEndpointUri(List<String> objectIds) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.trainings)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + trainings)
                 .queryParam(PARAM_FILTER, buildTrainingFilterParams(objectIds))
-                .queryParam(PARAM_SELECT, Arrays.stream(TrainingReportAttributes.values())
+                .queryParam(PARAM_SELECT, Arrays.stream(TrainingItem.TrainingReportAttributes.values())
                         .map(attr -> attr.getAttribute())
                         .collect(Collectors.joining(",")));
         return builder.toUriString();
@@ -157,21 +165,21 @@ public class MyDevApiClient implements IMyDevApiClient {
     private String buildTrainingFilterParams(List<String> objectIds) {
         StringBuilder sb = new StringBuilder();
         sb.append(OPENING_PARENTHESE);
-        sb.append(objectIds.stream().map(id -> TrainingReportAttributes.OBJECT_ID.getAttribute() + FILTER_EQUAL + id)
+        sb.append(objectIds.stream().map(id -> TrainingItem.TrainingReportAttributes.OBJECT_ID.getAttribute() + FILTER_EQUAL + id)
                 .collect(Collectors.joining(OPERATOR_OR)));
         sb.append(CLOSING_PARENTHESE);
         return sb.toString();
     }
 
     private String getTrainingsLocalEndpointUri(Integer cultureId, List<String> objectIds) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.trainingsLocal)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + trainingsLocal)
                 .queryParam(PARAM_FILTER, buildTrainingLocalFilterParams(cultureId, objectIds));
         return builder.toUriString();
     }
 
     private String buildTrainingLocalFilterParams(Integer cultureId, List<String> objectIds) {
         StringBuilder sb = new StringBuilder();
-        sb.append(TrainingLocalReportAttributes.TRAINING_TITLE_LOCAL_CULTURE_ID.getAttribute());
+        sb.append(TrainingLocalItem.TrainingLocalReportAttributes.TRAINING_TITLE_LOCAL_CULTURE_ID.getAttribute());
         sb.append(FILTER_EQUAL);
         sb.append(cultureId);
         sb.append(OPERATOR_AND);
@@ -180,27 +188,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     private String buildInObjectIdsFilter(List<String> objectIds) {
-        String filters = objectIds.stream().map(objectId -> TrainingLocalReportAttributes.TRAINING_TITLE_LOCAL_OBJECT_ID.getAttribute() + FILTER_EQUAL + objectId).collect(Collectors.joining(OPERATOR_OR));
+        String filters = objectIds.stream().map(objectId -> TrainingLocalItem.TrainingLocalReportAttributes.TRAINING_TITLE_LOCAL_OBJECT_ID.getAttribute() + FILTER_EQUAL + objectId).collect(Collectors.joining(OPERATOR_OR));
         return OPENING_PARENTHESE + filters + CLOSING_PARENTHESE;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

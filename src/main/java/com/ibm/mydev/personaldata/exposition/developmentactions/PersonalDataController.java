@@ -1,21 +1,22 @@
 package com.ibm.mydev.personaldata.exposition.developmentactions;
 
 import com.ibm.mydev.personaldata.domain.developmentactions.DevelopmentAction;
-import com.ibm.mydev.personaldata.domain.developmentactions.DevelopmentActions;
+import com.ibm.mydev.personaldata.domain.developmentactions.MyDevDevelopmentActions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
+
+import java.util.Set;
 
 @RestController
 public class PersonalDataController {
 
     @Autowired
-    public DevelopmentActions developmentActions;
+    public MyDevDevelopmentActions mydevDevelopmentActions;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/user/{uid}/{year}/development/actions/mydev")
+    @RequestMapping(method = RequestMethod.GET, value = "/{collaboratorId}/developmentplan/actions/mydev/{year}/{locale}")
     @ResponseBody
-    public List<DevelopmentAction> getDevelopmentActions(@PathVariable("uid") String uid, @PathVariable("year") Integer year) throws Exception {
+    public Set<DevelopmentAction> getDevelopmentActions(@PathVariable("collaboratorId") String collaboratorId, @PathVariable("year") int year, @PathVariable("locale") String locale) throws Exception {
 
-        return developmentActions.getDevelopmentActions(uid, year);
+        return mydevDevelopmentActions.findBySubjectAndDevelopmentYear(collaboratorId, year, locale);
     }
 }

@@ -10,7 +10,7 @@ public abstract class MyDevView<T> {
 
     private String context;
 
-    @SerializedName("value")
+    @JsonProperty("value")
     private List<T> value;
 
     @JsonProperty("context")

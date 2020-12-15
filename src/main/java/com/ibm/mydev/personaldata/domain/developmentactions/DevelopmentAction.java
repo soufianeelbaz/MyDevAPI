@@ -14,10 +14,28 @@ public class DevelopmentAction {
     private String actionName;
     private LocalDate deadline;
     private LocalDateTime timestamp = LocalDateTime.now(systemUTC());
-    private String developmentYear;
+    private int developmentYear;
     private DevelopmentActionStatus developmentActionStatus;
     private DevelopmentActionType developmentActionType;
     private boolean deleted;
+    private Boolean myDevTrainingMandatory;
+    private String myDevTrainingCategory;
+
+    public DevelopmentAction() {
+    }
+
+    public DevelopmentAction(String source, String subject, List<DevelopmentObjective> coveredObjectives, String actionName, LocalDate deadline, int developmentYear, DevelopmentActionStatus developmentActionStatus, DevelopmentActionType developmentActionType, Boolean myDevTrainingMandatory, String myDevTrainingCategory) {
+        this.source = source;
+        this.subject = subject;
+        this.coveredObjectives = coveredObjectives;
+        this.actionName = actionName;
+        this.deadline = deadline;
+        this.developmentYear = developmentYear;
+        this.developmentActionStatus = developmentActionStatus;
+        this.developmentActionType = developmentActionType;
+        this.myDevTrainingMandatory = myDevTrainingMandatory;
+        this.myDevTrainingCategory = myDevTrainingCategory;
+    }
 
     public String getSource() {
         return source;
@@ -67,11 +85,11 @@ public class DevelopmentAction {
         this.timestamp = timestamp;
     }
 
-    public String getDevelopmentYear() {
+    public int getDevelopmentYear() {
         return developmentYear;
     }
 
-    public void setDevelopmentYear(String developmentYear) {
+    public void setDevelopmentYear(int developmentYear) {
         this.developmentYear = developmentYear;
     }
 
@@ -97,5 +115,21 @@ public class DevelopmentAction {
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public Boolean getMyDevTrainingMandatory() {
+        return myDevTrainingMandatory;
+    }
+
+    public void setMyDevTrainingMandatory(Boolean myDevTrainingMandatory) {
+        this.myDevTrainingMandatory = myDevTrainingMandatory;
+    }
+
+    public String getMyDevTrainingCategory() {
+        return myDevTrainingCategory;
+    }
+
+    public void setMyDevTrainingCategory(String myDevTrainingCategory) {
+        this.myDevTrainingCategory = myDevTrainingCategory;
     }
 }

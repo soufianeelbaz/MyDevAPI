@@ -21,35 +21,8 @@ import java.util.List;
 @Configuration
 public class MyDevApiConfiguration {
 
-    @Value("${mydev.csod.api}")
-    public String baseUrl;
-
-    @Value("${mydev.csod.api.credentials.clientId}")
-    public String clientId;
-
-    @Value("${mydev.csod.api.credentials.clientSecret}")
-    public String clientSecret;
-
-    @Value("${mydev.csod.api.endpoints.auth}")
-    public String authentication;
-
-    @Value("${mydev.csod.api.endpoints.trainings}")
-    public String trainings;
-
-    @Value("${mydev.csod.api.endpoints.trainingsLocal}")
-    public String trainingsLocal;
-
-    @Value("${mydev.csod.api.endpoints.transcripts}")
-    public String transcripts;
-
-    @Value("${mydev.csod.api.endpoints.users}")
-    public String users;
-
     @Value("${mydev.csod.api.timeout:30}")
     public int timeout;
-
-    @Value("${mydev.csod.api.chunk.url.size}")
-    public int chunkUrlSize;
 
     @Bean
     public RestTemplateCustomizer customRestTemplateCustomizer() {
@@ -64,7 +37,7 @@ public class MyDevApiConfiguration {
 
     @Bean
     public MyDevTokenService myDevTokenService() {
-        return new MyDevTokenService(myDevOAuthRestTemplate(), baseUrl + authentication);
+        return new MyDevTokenService(myDevOAuthRestTemplate());
     }
 
     @Bean
@@ -73,7 +46,6 @@ public class MyDevApiConfiguration {
         builder.setConnectTimeout(timeout);
         builder.setReadTimeout(timeout);
         builder.customizers(customRestTemplateCustomizer());
-        builder.rootUri(baseUrl);
         RestTemplate restTemplate = builder.build();
         List<ClientHttpRequestInterceptor> interceptors
                 = restTemplate.getInterceptors();

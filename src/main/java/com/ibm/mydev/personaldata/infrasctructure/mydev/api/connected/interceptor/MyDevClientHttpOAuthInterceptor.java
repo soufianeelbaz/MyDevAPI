@@ -1,5 +1,6 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.interceptor;
 
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.IMyDevTokenService;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.MyDevTokenService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
@@ -13,9 +14,9 @@ import java.io.IOException;
 
 public class MyDevClientHttpOAuthInterceptor implements ClientHttpRequestInterceptor {
 
-    private MyDevTokenService tokenService;
+    private IMyDevTokenService tokenService;
 
-    public MyDevClientHttpOAuthInterceptor(MyDevTokenService tokenService) {
+    public MyDevClientHttpOAuthInterceptor(IMyDevTokenService tokenService) {
         this.tokenService = tokenService;
     }
 
