@@ -42,12 +42,12 @@ public class MyDevApiClientLocalItTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        apiConfiguration.baseUrl = "https://hr-bnpparibas-stg.csod.com/";
+        /*apiConfiguration.baseUrl = "https://hr-bnpparibas-stg.csod.com/";
         apiConfiguration.authentication = "/services/api/oauth2/token";
         apiConfiguration.users = "services/api/x/odata/api/views/vw_rpt_user";
         apiConfiguration.transcripts = "services/api/x/odata/api/views/vw_rpt_transcript";
         apiConfiguration.trainings = "services/api/x/odata/api/views/vw_rpt_training";
-        apiConfiguration.trainingsLocal = "services/api/x/odata/api/views/vw_rpt_training_title_local";
+        apiConfiguration.trainingsLocal = "services/api/x/odata/api/views/vw_rpt_training_title_local";*/
     }
 
     @Test

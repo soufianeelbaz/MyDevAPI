@@ -1,7 +1,6 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected;
 
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.IMyDevApiClient;
-import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevApiConfiguration;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.MyDevTokenService;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingItem.TrainingReportAttributes;
@@ -12,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -52,13 +52,20 @@ public class MyDevApiClient implements IMyDevApiClient {
     private static final String OPENING_PARENTHESE = "(";
     private static final String CLOSING_PARENTHESE = ")";
 
-    @Autowired
-    public MyDevApiConfiguration apiConfiguration;
+    @Value("${mydev.csod.api}")
+    private String baseUrl;
+    @Value("${mydev.csod.api.endpoints.trainings}")
+    public String trainings;
+    @Value("${mydev.csod.api.endpoints.trainingsLocal}")
+    public String trainingsLocal;
+    @Value("${mydev.csod.api.endpoints.transcripts}")
+    public String transcripts;
+    @Value("${mydev.csod.api.endpoints.users}")
+    public String users;
 
     @Autowired
     @Qualifier("MyDevRestTemplate")
     public RestTemplate restTemplate;
-
     @Autowired
     public MyDevTokenService tokenService;
 
@@ -111,7 +118,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     private String getUsersEndpointUri(String uid) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.users)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + users)
                 .queryParam(PARAM_FILTER, buildUserFilterParams(uid))
                 .queryParam(PARAM_SELECT, Arrays.stream(UserReportAttributes.values())
                         .map(attr -> attr.getAttribute())
@@ -130,7 +137,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     private String getTranscriptsEndpointUri(Integer id, Integer year) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.transcripts)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + transcripts)
                 .queryParam(PARAM_FILTER, buildTranscriptFilterParams(id, year))
                 .queryParam(PARAM_SELECT, Arrays.stream(TranscriptReportAttributes.values())
                         .map(attr -> attr.getAttribute())
@@ -146,7 +153,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     private String getTrainingsEndpointUri(List<String> objectIds) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.trainings)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + trainings)
                 .queryParam(PARAM_FILTER, buildTrainingFilterParams(objectIds))
                 .queryParam(PARAM_SELECT, Arrays.stream(TrainingReportAttributes.values())
                         .map(attr -> attr.getAttribute())
@@ -164,7 +171,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     private String getTrainingsLocalEndpointUri(Integer cultureId, List<String> objectIds) {
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(apiConfiguration.baseUrl + apiConfiguration.trainingsLocal)
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(baseUrl + trainingsLocal)
                 .queryParam(PARAM_FILTER, buildTrainingLocalFilterParams(cultureId, objectIds));
         return builder.toUriString();
     }

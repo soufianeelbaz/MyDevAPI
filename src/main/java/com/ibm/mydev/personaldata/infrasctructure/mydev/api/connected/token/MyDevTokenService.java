@@ -5,6 +5,7 @@ import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevA
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,16 +17,20 @@ public class MyDevTokenService implements IMyDevTokenService {
     private static String GRANT_TYPE_CLIENT_CREDENTIALS = "client_credentials";
     private static String SCOPE_ALL = "all";
 
-    @Autowired
-    public MyDevApiConfiguration myDevApiConfiguration;
+    @Value("${mydev.csod.api}")
+    private String baseUrl;
+    @Value("${mydev.csod.api.credentials.clientId}")
+    private String clientId;
+    @Value("${mydev.csod.api.credentials.clientSecret}")
+    private String clientSecret;
+    @Value("${mydev.csod.api.endpoints.auth}")
+    private String authentication;
 
     private RestTemplate restTemplate;
-    private String authUrl;
     private String token;
 
-    public MyDevTokenService(RestTemplate restTemplate, String authUrl) {
+    public MyDevTokenService(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.authUrl = authUrl;
     }
 
     @Override
@@ -33,7 +38,7 @@ public class MyDevTokenService implements IMyDevTokenService {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(getAuthRequestBody(), headers);
         ResponseEntity<MyDevTokenResponseBody> response = restTemplate.exchange(
-                authUrl, HttpMethod.POST,
+                baseUrl + authentication, HttpMethod.POST,
                 request, MyDevTokenResponseBody.class);
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             token = response.getBody().getAccessToken();
@@ -60,8 +65,8 @@ public class MyDevTokenService implements IMyDevTokenService {
 
     private MyDevTokenRequestBody getAuthRequestBody() {
         MyDevTokenRequestBody body = new MyDevTokenRequestBody();
-        body.setClientId(myDevApiConfiguration.clientId);
-        body.setClientSecret(myDevApiConfiguration.clientSecret);
+        body.setClientId(clientId);
+        body.setClientSecret(clientSecret);
         body.setGrantType(GRANT_TYPE_CLIENT_CREDENTIALS);
         body.setScope(SCOPE_ALL);
         return body;
