@@ -14,18 +14,27 @@ public class MyDevClientHttpLogInterceptor implements ClientHttpRequestIntercept
     private static Logger LOGGER = LoggerFactory
             .getLogger(MyDevClientHttpLogInterceptor.class);
 
-    private static final String ERROR_400 = "CSOD Bad Request.";
-    private static final String ERROR_401 = "CSOD Unauthorized.";
-    private static final String ERROR_404 = "CSOD Not Found.";
-    private static final String ERROR_429 = "CSOD Too many requests.";
-    private static final String ERROR_50_ = "CSOD Internal Server Error.";
+    private static final int ERROR_CODE_200 = 200;
+    private static final int ERROR_CODE_400 = 400;
+    private static final int ERROR_CODE_401 = 401;
+    private static final int ERROR_CODE_404 = 404;
+    private static final int ERROR_CODE_429 = 429;
+    private static final int ERROR_CODE_500 = 500;
+    private static final int ERROR_CODE_503 = 503;
+    private static final int ERROR_CODE_504 = 504;
+
+    private static final String ERROR_MESSAGE_400 = "CSOD Bad Request.";
+    private static final String ERROR_MESSAGE_401 = "CSOD Unauthorized.";
+    private static final String ERROR_MESSAGE_404 = "CSOD Not Found.";
+    private static final String ERROR_MESSAGE_429 = "CSOD Too many requests.";
+    private static final String ERROR_MESSAGE_50_ = "CSOD Internal Server Error.";
 
     @Override
     public ClientHttpResponse intercept(
             HttpRequest request, byte[] body,
             ClientHttpRequestExecution execution) throws IOException {
-        ClientHttpResponse response = execution.execute(request, body);
 
+        ClientHttpResponse response = execution.execute(request, body);
         logRequestAndResponseDetails(request, response);
         return response;
     }
@@ -41,24 +50,24 @@ public class MyDevClientHttpLogInterceptor implements ClientHttpRequestIntercept
     private String getCSODHttpStatusMessage(ClientHttpResponse response) throws IOException {
         int status = response.getRawStatusCode();
         String message = null;
-        if (status != 200) {
+        if (status != ERROR_CODE_200) {
             switch (status) {
-                case 400:
-                    message = ERROR_400;
+                case ERROR_CODE_400:
+                    message = ERROR_MESSAGE_400;
                     break;
-                case 401:
-                    message = ERROR_401;
+                case ERROR_CODE_401:
+                    message = ERROR_MESSAGE_401;
                     break;
-                case 404:
-                    message = ERROR_404;
+                case ERROR_CODE_404:
+                    message = ERROR_MESSAGE_404;
                     break;
-                case 429:
-                    message = ERROR_429;
+                case ERROR_CODE_429:
+                    message = ERROR_MESSAGE_429;
                     break;
-                case 500:
-                case 503:
-                case 504:
-                    message = ERROR_50_;
+                case ERROR_CODE_500:
+                case ERROR_CODE_503:
+                case ERROR_CODE_504:
+                    message = ERROR_MESSAGE_50_;
                     break;
                 default:
                     break;

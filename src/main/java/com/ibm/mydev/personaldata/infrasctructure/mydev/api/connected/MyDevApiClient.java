@@ -6,6 +6,7 @@ import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingItem.TrainingReportAttributes;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingLocalItem.TrainingLocalReportAttributes;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TranscriptItem.TranscriptReportAttributes;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TranscriptItem.TranscriptFilter;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.UserItem.UserReportAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,12 +40,15 @@ public class MyDevApiClient implements IMyDevApiClient {
     private static final String SINGLE_QUOTE = "'";
 
     private static final String FILTER_EQUAL = " eq ";
-    private static final String FILTER_TRANSCRIPT_QUERY = "transc_user_id eq $TRANSC_USER_ID " +
-            "and is_removed eq false " +
-            "and is_standalone eq true " +
-            "and is_latest_reg_num eq 1 " +
-            "and (((user_lo_status_group_id eq 12 or user_lo_status_group_id eq 13) and is_archive eq 0) " +
-            "or (user_lo_status_group_id eq 11 and user_lo_comp_dt ge cast('$YEAR', Edm.DateTimeOffset)))";
+    private static final String FILTER_TRANSCRIPT_QUERY = "transc_user_id eq %s" +
+            " and is_removed eq false" +
+            " and is_standalone eq true" +
+            " and is_latest_reg_num eq " + TranscriptFilter.getCode(TranscriptFilter.LAST_ENTRY) +
+            " and (((user_lo_status_group_id eq " + TranscriptFilter.getCode(TranscriptFilter.IN_PROGRESS) +
+            " or user_lo_status_group_id eq " + TranscriptFilter.getCode(TranscriptFilter.NOT_STARTED) + ")" +
+            " and is_archive eq " + TranscriptFilter.getCode(TranscriptFilter.NOT_ARCHIVED) + ")" +
+            " or (user_lo_status_group_id eq " + TranscriptFilter.getCode(TranscriptFilter.DONE) +
+            " and user_lo_comp_dt ge cast('%s', Edm.DateTimeOffset)))";
 
     private static final String OPERATOR_AND = " and ";
     private static final String OPERATOR_OR = " or ";
@@ -150,10 +154,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     private String buildTranscriptFilterParams(Integer transcriptUserId, Integer year) {
-        return FILTER_TRANSCRIPT_QUERY
-                .replace("$TRANSC_USER_ID", String.valueOf(transcriptUserId))
-                .replace("$YEAR", (year - 5) + "-01-01");
-        // "%s" todo
+        return String.format(FILTER_TRANSCRIPT_QUERY, transcriptUserId, (year - 5) + "-01-01");
     }
 
     private String getTrainingsEndpointUri(List<String> objectIds) {

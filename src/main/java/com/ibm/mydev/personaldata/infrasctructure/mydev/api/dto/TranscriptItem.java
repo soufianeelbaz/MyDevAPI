@@ -177,4 +177,27 @@ public class TranscriptItem {
             return attribute;
         }
     }
+
+    public enum TranscriptFilter {
+
+        LAST_ENTRY(1),
+        DONE(11),
+        IN_PROGRESS(12),
+        NOT_STARTED(13),
+        NOT_ARCHIVED(0);
+
+        private Integer code;
+
+        TranscriptFilter(Integer code) {
+            this.code = code;
+        }
+
+        public Integer getCode() {
+            return code;
+        }
+
+        public static Integer getCode(TranscriptFilter filter) {
+            return filter.getCode();
+        }
+    }
 }

@@ -3,6 +3,7 @@ package com.ibm.mydev.personaldata.infrasctructure.mydev.api;
 import com.google.common.collect.Lists;
 import com.ibm.mydev.personaldata.domain.developmentactions.*;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
+import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,14 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
 
     private static Logger LOGGER = LoggerFactory
             .getLogger(MyDevDevelopmentActions.class);
+
+    public static final String MY_DEV_EXTERNAL_TRAINING = "EXTL";
+    public static final String INTERNAL_TRAININGS = "INTERNAL_TRAININGS";
+    public static final String EXTERNAL_TRAININGS = "EXTERNAL_TRAININGS";
+
+    private static final int DONE = 11;
+    private static final int IN_PROGRESS = 12;
+    private static final int NOT_STARTED = 13;
 
     @Autowired
     public IMyDevApiClient myDevApiClient;
@@ -97,8 +106,8 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
                         .stream()
                         .filter(developmentActionType ->
                                 developmentActionType.getCode() != null &&
-                                        (developmentActionType.getCode().equals("EXTERNAL_TRAININGS") ||
-                                                developmentActionType.getCode().equals("INTERNAL_TRAININGS")))
+                                        (developmentActionType.getCode().equals(EXTERNAL_TRAININGS) ||
+                                                developmentActionType.getCode().equals(INTERNAL_TRAININGS)))
                         .collect(Collectors.toMap(d -> d.getCode(), Function.identity()));
 
         return transcripts
@@ -156,10 +165,11 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
 
 
     private DevelopmentActionType getDevelopmentActionsType(TrainingItem training, Map<String, DevelopmentActionType> translatedActionTypesMappedByCode) {
-        if (training != null && !StringUtils.isEmpty(training.getCategory()) && "EXTL".equals(training.getCategory())) {
-            return translatedActionTypesMappedByCode.get("EXTERNAL_TRAININGS");
+        if (training != null && !StringUtils.isEmpty(training.getCategory()) && MY_DEV_EXTERNAL_TRAINING.equals(training.getCategory())) {
+            return translatedActionTypesMappedByCode.get(EXTERNAL_TRAININGS);
         }
-        return translatedActionTypesMappedByCode.get("INTERNAL_TRAININGS");
+        return translatedActionTypesMappedByCode.get(INTERNAL_TRAININGS);
+
     }
 
     private DevelopmentActionStatus getDevelopmentActionsStatus(TranscriptItem transcript) {
@@ -167,11 +177,11 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
         if (transcript.getStatus() != null) {
             Integer myDevStatus = transcript.getStatus();
             switch(myDevStatus) {
-                case 12:
-                case 13:
+                case NOT_STARTED:
+                case IN_PROGRESS:
                     status = DevelopmentActionStatus.IN_PROGRESS;
                     break;
-                case 11:
+                case DONE:
                     status = DevelopmentActionStatus.DONE;
                     break;
                 default:

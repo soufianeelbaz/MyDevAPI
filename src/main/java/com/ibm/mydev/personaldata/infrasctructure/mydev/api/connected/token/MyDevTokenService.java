@@ -46,7 +46,7 @@ public class MyDevTokenService implements IMyDevTokenService {
             token = response.getBody().getAccessToken();
             LOGGER.info("Token récupéré avec succès: \"{}\"", token);
         } else {
-            LOGGER.error("Erreur lors de la récupération du token: {}", response.getStatusCode());
+            LOGGER.info("Erreur lors de la récupération du token: {}", response.getStatusCode());
         }
     }
 
