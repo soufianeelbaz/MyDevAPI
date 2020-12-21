@@ -43,10 +43,10 @@ public class MyDevApiClient implements IMyDevApiClient {
     private static final String FILTER_TRANSCRIPT_QUERY = "transc_user_id eq %s" +
             " and is_removed eq false" +
             " and is_standalone eq true" +
-            " and is_latest_reg_num eq " + TranscriptFilter.getCode(TranscriptFilter.LAST_ENTRY) +
+            " and is_latest_version_on_transcript eq true" +
             " and (((user_lo_status_group_id eq " + TranscriptFilter.getCode(TranscriptFilter.IN_PROGRESS) +
             " or user_lo_status_group_id eq " + TranscriptFilter.getCode(TranscriptFilter.NOT_STARTED) + ")" +
-            " and is_archive eq " + TranscriptFilter.getCode(TranscriptFilter.NOT_ARCHIVED) + ")" +
+            " and archived eq false)" +
             " or (user_lo_status_group_id eq " + TranscriptFilter.getCode(TranscriptFilter.DONE) +
             " and user_lo_comp_dt ge cast('%s', Edm.DateTimeOffset)))";
 

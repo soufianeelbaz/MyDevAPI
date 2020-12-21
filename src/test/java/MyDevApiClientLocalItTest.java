@@ -88,13 +88,13 @@ public class MyDevApiClientLocalItTest {
         MyDevTranscriptView mockedTranscriptView = new MyDevTranscriptView();
 
         List<TranscriptItem> transcriptItems = new ArrayList<>();
-        transcriptItems.add(new TranscriptItem(OBJECT_IDS.get(0), 11, 1, 0, false, true, "2017-11-27T06:54:01.693Z", null, "2017-11-27T07:12:26.657Z", null, USER_ID));
-        transcriptItems.add(new TranscriptItem(OBJECT_IDS.get(1), 12, 1, 0, false, true, "2018-11-27T06:54:01.693Z", null, "2018-11-27T07:12:26.657Z", null, USER_ID));
+        transcriptItems.add(new TranscriptItem(OBJECT_IDS.get(0), 11, true, false, false, true, "2017-11-27T06:54:01.693Z", null, "2017-11-27T07:12:26.657Z", null, USER_ID));
+        transcriptItems.add(new TranscriptItem(OBJECT_IDS.get(1), 12, true, false, false, true, "2018-11-27T06:54:01.693Z", null, "2018-11-27T07:12:26.657Z", null, USER_ID));
         mockedTranscriptView.setValue(transcriptItems);
 
         Mockito.when(tokenService.getAccessToken()).thenReturn(TEST_TOKEN);
         Mockito.when(restTemplate.exchange(
-                eq("https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/vw_rpt_transcript?$filter=transc_user_id%20eq%201%20and%20is_removed%20eq%20false%20and%20is_standalone%20eq%20true%20and%20is_latest_reg_num%20eq%201%20and%20(((user_lo_status_group_id%20eq%2012%20or%20user_lo_status_group_id%20eq%2013)%20and%20is_archive%20eq%200)%20or%20(user_lo_status_group_id%20eq%2011%20and%20user_lo_comp_dt%20ge%20cast('2015-01-01',%20Edm.DateTimeOffset)))&$select=transc_object_id,user_lo_status_group_id,is_latest_reg_num,is_archive,is_removed,is_standalone,user_lo_reg_dt,user_lo_min_due_date,user_lo_comp_dt,training_purpose,transc_user_id"),
+                eq("https://hr-bnpparibas-stg.csod.com/services/api/x/odata/api/views/vw_rpt_transcript?$filter=transc_user_id%20eq%201%20and%20is_removed%20eq%20false%20and%20is_standalone%20eq%20true%20and%20is_latest_version_on_transcript%20eq%20true%20and%20(((user_lo_status_group_id%20eq%2012%20or%20user_lo_status_group_id%20eq%2013)%20and%20archived%20eq%20false)%20or%20(user_lo_status_group_id%20eq%2011%20and%20user_lo_comp_dt%20ge%20cast('2015-01-01',%20Edm.DateTimeOffset)))&$select=transc_object_id,user_lo_status_group_id,is_latest_version_on_transcript,archived,is_removed,is_standalone,user_lo_reg_dt,user_lo_min_due_date,user_lo_comp_dt,training_purpose,transc_user_id"),
                 eq(HttpMethod.GET),
                 any(HttpEntity.class),
                 eq(MyDevTranscriptView.class)))
@@ -105,10 +105,10 @@ public class MyDevApiClientLocalItTest {
         Assert.assertNotNull(transcriptData);
         Assert.assertNotNull(transcriptData.getValue());
         Assert.assertEquals(2, transcriptData.getValue().size());
-        Assert.assertEquals(1, transcriptData.getValue().get(0).getIsLatest().intValue());
-        Assert.assertEquals(1, transcriptData.getValue().get(1).getIsLatest().intValue());
-        Assert.assertEquals(0, transcriptData.getValue().get(0).getIsArchived().intValue());
-        Assert.assertEquals(0, transcriptData.getValue().get(1).getIsArchived().intValue());
+        Assert.assertTrue(transcriptData.getValue().get(0).getIsLatest());
+        Assert.assertTrue(transcriptData.getValue().get(1).getIsLatest());
+        Assert.assertFalse(transcriptData.getValue().get(0).getIsArchived());
+        Assert.assertFalse(transcriptData.getValue().get(1).getIsArchived());
         Assert.assertFalse(transcriptData.getValue().get(0).getRemoved());
         Assert.assertFalse(transcriptData.getValue().get(1).getRemoved());
         Assert.assertTrue(transcriptData.getValue().get(0).getStandalone());

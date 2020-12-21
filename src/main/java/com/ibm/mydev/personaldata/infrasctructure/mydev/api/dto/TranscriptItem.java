@@ -8,9 +8,9 @@ public class TranscriptItem {
 
     private Integer status;
 
-    private Integer isLatest;
+    private Boolean isLatest;
 
-    private Integer isArchived;
+    private Boolean isArchived;
 
     private Boolean isRemoved;
 
@@ -29,7 +29,7 @@ public class TranscriptItem {
     public TranscriptItem() {
     }
 
-    public TranscriptItem(String trainingId, Integer status, Integer isLatest, Integer isArchived, Boolean isRemoved, Boolean isStandalone, String registrationDate, String dueDate, String completionDate, Integer trainingPurpose, Integer userId) {
+    public TranscriptItem(String trainingId, Integer status, Boolean isLatest, Boolean isArchived, Boolean isRemoved, Boolean isStandalone, String registrationDate, String dueDate, String completionDate, Integer trainingPurpose, Integer userId) {
         this.trainingId = trainingId;
         this.status = status;
         this.isLatest = isLatest;
@@ -74,22 +74,22 @@ public class TranscriptItem {
     }
 
     @JsonProperty("isLatest")
-    public Integer getIsLatest() {
+    public Boolean getIsLatest() {
         return isLatest;
     }
 
-    @JsonProperty("is_latest_reg_num")
-    public void setIsLatest(Integer isLatest) {
+    @JsonProperty("is_latest_version_on_transcript")
+    public void setIsLatest(Boolean isLatest) {
         this.isLatest = isLatest;
     }
 
     @JsonProperty("isArchived")
-    public Integer getIsArchived() {
+    public Boolean getIsArchived() {
         return isArchived;
     }
 
-    @JsonProperty("is_archive")
-    public void setIsArchived(Integer isArchived) {
+    @JsonProperty("archived")
+    public void setIsArchived(Boolean isArchived) {
         this.isArchived = isArchived;
     }
 
@@ -157,8 +157,8 @@ public class TranscriptItem {
 
         TRANSC_OBJECT_ID("transc_object_id"),
         USER_LO_STATUS_GROUP_ID("user_lo_status_group_id"),
-        IS_LATEST_REG_NUM("is_latest_reg_num"),
-        IS_ARCHIVE("is_archive"),
+        IS_LATEST_REG_NUM("is_latest_version_on_transcript"),
+        IS_ARCHIVE("archived"),
         IS_REMOVED("is_removed"),
         IS_STANDALONE("is_standalone"),
         USER_LO_REG_DT("user_lo_reg_dt"),
@@ -180,11 +180,9 @@ public class TranscriptItem {
 
     public enum TranscriptFilter {
 
-        LAST_ENTRY(1),
         DONE(11),
         IN_PROGRESS(12),
-        NOT_STARTED(13),
-        NOT_ARCHIVED(0);
+        NOT_STARTED(13);
 
         private Integer code;
 
