@@ -1140,7 +1140,7 @@
         {
             "object_id": "20634863-cd00-4475-8d86-dfc99d325ed3",
             "lo_title": "GLOBAL ENGLISH 2010",
-            "lo_start_dt": null,
+            "lo_start_dt": "2018-07-01T07:00:00Z",
             "lo_end_dt": null,
             "lo_object_type": "EVNT",
             "lo_hours": 60.00
@@ -1148,8 +1148,8 @@
         {
             "object_id": "529991b8-1e4c-433d-9275-e5f6d711e773",
             "lo_title": "Anglais - Cours Telephone",
-            "lo_start_dt": "2013-07-01T07:00:00Z",
-            "lo_end_dt": "2013-07-01T19:00:00Z",
+            "lo_start_dt": null,
+            "lo_end_dt": null,
             "lo_object_type": "SESN",
             "lo_hours": 10.00
         },

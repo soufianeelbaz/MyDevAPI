@@ -1,6 +1,7 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.ibm.mydev.personaldata.domain.developmentactions.*;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import io.swagger.models.auth.In;
@@ -12,11 +13,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
@@ -27,6 +34,7 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
     public static final String MY_DEV_EXTERNAL_TRAINING = "EXTL";
     public static final String INTERNAL_TRAININGS = "INTERNAL_TRAININGS";
     public static final String EXTERNAL_TRAININGS = "EXTERNAL_TRAININGS";
+    public static final int START_INDEX_1_TO_EXCLUDE_CURRENT_YEAR = 1;
 
     private static final int DONE = 11;
     private static final int IN_PROGRESS = 12;
@@ -117,25 +125,134 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
                     TrainingItem training = trainingItemMappedById.get(transcript.getTrainingId());
                     TrainingLocalItem trainingLocal = trainingLocalItemMappedById.get(transcript.getTrainingId());
                     return transformTranscriptToDevelopmentAction(user, transcript, training, trainingLocal, translatedActionTypesMappedByCode);
-                }).collect(Collectors.toSet());
+                })
+                .filter(d->Objects.nonNull(d))
+                .flatMap(developmentActions -> developmentActions.stream())
+                .collect(Collectors.toSet());
     }
 
-    private DevelopmentAction transformTranscriptToDevelopmentAction(UserItem user,
+    private Set<DevelopmentAction> transformTranscriptToDevelopmentAction(UserItem user,
                                                                      TranscriptItem transcript,
                                                                      TrainingItem training,
                                                                      TrainingLocalItem trainingLocal,
                                                                      Map<String, DevelopmentActionType> translatedActionTypesMappedByCode) {
+
+        Integer beginTrainingYear = getBeginTrainingYear(transcript, training);
+        Integer completionTrainingYear = getCompletionTrainingYear(transcript);
+        int currentYear = LocalDate.now().getYear();
+
+        if (transcript.getStatus() != null && beginTrainingYear != null) {
+            if (beginTrainingYear <= currentYear) {
+                int endIndexForTrainingInProgress = currentYear - beginTrainingYear;
+                switch (transcript.getStatus()) {
+                    case NOT_STARTED:
+                    case IN_PROGRESS:
+                        if (beginTrainingYear.equals(currentYear)) {
+                            return Sets.newHashSet(
+                                    createDevelopmentAction(user, transcript, training, trainingLocal, translatedActionTypesMappedByCode,
+                                            DevelopmentActionStatus.IN_PROGRESS, currentYear)
+                            );
+                        } else if (isIntervalOfYearsValid(beginTrainingYear, currentYear)) {
+                            return prepareDevelopmentActionsInProgress(user, transcript, training, trainingLocal, translatedActionTypesMappedByCode,
+                                    currentYear, START_INDEX_1_TO_EXCLUDE_CURRENT_YEAR - 1, endIndexForTrainingInProgress);
+                        }
+                        break;
+                    case DONE:
+                        if (completionTrainingYear != null && completionTrainingYear.equals(currentYear)) {
+                            if (beginTrainingYear.equals(currentYear)) {
+                                return Sets.newHashSet(
+                                        createDevelopmentAction(user, transcript, training, trainingLocal, translatedActionTypesMappedByCode,
+                                                DevelopmentActionStatus.DONE, currentYear)
+                                );
+                            } else if (isIntervalOfYearsValid(beginTrainingYear, currentYear)) {
+                                Set<DevelopmentAction> developmentActions = prepareDevelopmentActionsInProgress(user, transcript, training, trainingLocal,
+                                        translatedActionTypesMappedByCode, currentYear, START_INDEX_1_TO_EXCLUDE_CURRENT_YEAR, endIndexForTrainingInProgress);
+                                developmentActions.add(
+                                        createDevelopmentAction(user, transcript, training, trainingLocal, translatedActionTypesMappedByCode,
+                                                DevelopmentActionStatus.DONE, currentYear)
+                                );
+                                return developmentActions;
+                            }
+                        }
+                        break;
+                    default:
+                        return null;
+                }
+            } else if (isExpectedDevelopmentActionNextYear(transcript, beginTrainingYear, currentYear)) {
+                return Sets.newHashSet(
+                        createDevelopmentAction(user, transcript, training, trainingLocal, translatedActionTypesMappedByCode,
+                                DevelopmentActionStatus.IN_PROGRESS, currentYear + 1)
+                );
+            }
+        }
+
+        return null;
+    }
+
+    private Set<DevelopmentAction> prepareDevelopmentActionsInProgress(UserItem user, TranscriptItem transcript, TrainingItem training, TrainingLocalItem trainingLocal,
+                                                                       Map<String, DevelopmentActionType> translatedActionTypesMappedByCode, int currentYear, int startIndex, int endIndex) {
+        Set<DevelopmentAction> developmentActions = Sets.newHashSet();
+        IntStream.rangeClosed(startIndex, endIndex)
+                .forEach(rangeValue -> {
+                    developmentActions.add(
+                            createDevelopmentAction(user, transcript, training, trainingLocal, translatedActionTypesMappedByCode, DevelopmentActionStatus.IN_PROGRESS, currentYear - rangeValue)
+                    );
+                });
+        return developmentActions;
+    }
+
+    private DevelopmentAction createDevelopmentAction(UserItem user, TranscriptItem transcript, TrainingItem training, TrainingLocalItem trainingLocal,
+                                                      Map<String, DevelopmentActionType> translatedActionTypesMappedByCode, DevelopmentActionStatus status, int year) {
+
         return new DevelopmentAction(
                 user.getCollaborator(),
                 user.getCollaborator(),
                 new ArrayList<>(),
                 getTrainingTitle(training, trainingLocal),
-                LocalDate.now(),
-                2020,
-                getDevelopmentActionsStatus(transcript),
+                manageDeadlineOfDevelopmentAction(transcript, training, status, year),
+                year,
+                status,
                 getDevelopmentActionsType(training, translatedActionTypesMappedByCode),
                 getMandatoryTraining(transcript),
-                getCategory(training));
+                getCategory(training)
+        );
+    }
+
+    private LocalDate manageDeadlineOfDevelopmentAction(TranscriptItem transcript, TrainingItem training, DevelopmentActionStatus status, int year) {
+        if (status.equals(DevelopmentActionStatus.IN_PROGRESS)) {
+            if (training.getEndDate() != null) {
+                return ZonedDateTime.parse(training.getEndDate()).toLocalDate();
+            } else if (transcript.getDueDate() != null) {
+                return ZonedDateTime.parse(transcript.getDueDate()).toLocalDate();
+            }
+        } else if (status.equals(DevelopmentActionStatus.DONE) && transcript.getCompletionDate() != null) {
+            return ZonedDateTime.parse(transcript.getCompletionDate()).toLocalDate();
+        }
+        return LocalDate.of(year, Month.DECEMBER, 1).with(TemporalAdjusters.lastDayOfYear());
+    }
+
+    private boolean isExpectedDevelopmentActionNextYear(TranscriptItem transcript, Integer beginTrainingYear, int currentYear) {
+        return beginTrainingYear.equals(currentYear + 1) && transcript.getStatus().equals(NOT_STARTED);
+    }
+
+    private boolean isIntervalOfYearsValid(Integer beginTrainingYear, int currentYear) {
+        return beginTrainingYear <= currentYear - 1 && beginTrainingYear >= currentYear - 3;
+    }
+
+    private Integer getBeginTrainingYear(TranscriptItem transcript, TrainingItem training) {
+        if (training.getStartDate() != null) {
+            return ZonedDateTime.parse(training.getStartDate()).getYear();
+        } else if (transcript.getRegistrationDate() != null) {
+            return ZonedDateTime.parse(transcript.getRegistrationDate()).getYear();
+        }
+        return null;
+    }
+
+    private Integer getCompletionTrainingYear(TranscriptItem transcript) {
+        if (transcript.getCompletionDate() != null) {
+            return ZonedDateTime.parse(transcript.getCompletionDate()).getYear();
+        }
+        return null;
     }
 
     private String getCategory(TrainingItem training) {
@@ -170,25 +287,6 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
         }
         return translatedActionTypesMappedByCode.get(INTERNAL_TRAININGS);
 
-    }
-
-    private DevelopmentActionStatus getDevelopmentActionsStatus(TranscriptItem transcript) {
-        DevelopmentActionStatus status = null;
-        if (transcript.getStatus() != null) {
-            Integer myDevStatus = transcript.getStatus();
-            switch(myDevStatus) {
-                case NOT_STARTED:
-                case IN_PROGRESS:
-                    status = DevelopmentActionStatus.IN_PROGRESS;
-                    break;
-                case DONE:
-                    status = DevelopmentActionStatus.DONE;
-                    break;
-                default:
-                    break;
-            }
-        }
-        return status;
     }
 
     private List<List<String>> getObjectIdsChunks(MyDevTranscriptView transcripts) {
