@@ -1,11 +1,15 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token;
 
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevClientException;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.utils.MyDevResponseCodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.IOException;
 
 public class MyDevTokenService implements IMyDevTokenService {
 
@@ -36,7 +40,7 @@ public class MyDevTokenService implements IMyDevTokenService {
     }
 
     @Override
-    public void refreshToken() {
+    public void refreshToken() throws IOException, MyDevClientException {
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(getAuthRequestBody(), headers);
         ResponseEntity<MyDevTokenResponseBody> response = restTemplate.exchange(
@@ -47,11 +51,14 @@ public class MyDevTokenService implements IMyDevTokenService {
             LOGGER.info("Token récupéré avec succès: \"{}\"", token);
         } else {
             LOGGER.info("Erreur lors de la récupération du token: {}", response.getStatusCode());
+            int code = response.getStatusCodeValue();
+            String msg = MyDevResponseCodeUtil.getCSODHttpStatusMessage(code, "");
+            throw new MyDevClientException(code, msg);
         }
     }
 
     @Override
-    public String getAccessToken() {
+    public String getAccessToken() throws IOException, MyDevClientException {
         if (token == null) {
             refreshToken();
         }

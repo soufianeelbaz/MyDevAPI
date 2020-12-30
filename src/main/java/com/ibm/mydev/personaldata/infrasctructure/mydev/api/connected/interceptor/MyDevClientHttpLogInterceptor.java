@@ -1,5 +1,7 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.interceptor;
 
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevClientException;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.utils.MyDevResponseCodeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpRequest;
@@ -14,28 +16,14 @@ public class MyDevClientHttpLogInterceptor implements ClientHttpRequestIntercept
     private static Logger LOGGER = LoggerFactory
             .getLogger(MyDevClientHttpLogInterceptor.class);
 
-    private static final int ERROR_CODE_200 = 200;
-    private static final int ERROR_CODE_400 = 400;
-    private static final int ERROR_CODE_401 = 401;
-    private static final int ERROR_CODE_404 = 404;
-    private static final int ERROR_CODE_429 = 429;
-    private static final int ERROR_CODE_500 = 500;
-    private static final int ERROR_CODE_503 = 503;
-    private static final int ERROR_CODE_504 = 504;
-
-    private static final String ERROR_MESSAGE_400 = "CSOD Bad Request.";
-    private static final String ERROR_MESSAGE_401 = "CSOD Unauthorized.";
-    private static final String ERROR_MESSAGE_404 = "CSOD Not Found.";
-    private static final String ERROR_MESSAGE_429 = "CSOD Too many requests.";
-    private static final String ERROR_MESSAGE_50_ = "CSOD Internal Server Error.";
-
     @Override
     public ClientHttpResponse intercept(
             HttpRequest request, byte[] body,
-            ClientHttpRequestExecution execution) throws IOException {
+            ClientHttpRequestExecution execution) throws IOException, MyDevClientException {
 
         ClientHttpResponse response = execution.execute(request, body);
         logRequestAndResponseDetails(request, response);
+        throwExceptionIfRequestFailed(response);
         return response;
     }
 
@@ -44,38 +32,14 @@ public class MyDevClientHttpLogInterceptor implements ClientHttpRequestIntercept
         LOGGER.info("Request Method: {}", request.getMethod());
         LOGGER.info("Request URI: {}", request.getURI());
         LOGGER.info("Response status code: {}", response.getStatusCode());
-        LOGGER.info("Response status text: {} {}", getCSODHttpStatusMessage(response), System.getProperty("line.separator"));
+        LOGGER.info("Response status text: {} {}", MyDevResponseCodeUtil.getCSODHttpStatusMessage(response.getRawStatusCode(), response.getStatusText()), System.getProperty("line.separator"));
     }
 
-    private String getCSODHttpStatusMessage(ClientHttpResponse response) throws IOException {
-        int status = response.getRawStatusCode();
-        String message = null;
-        if (status != ERROR_CODE_200) {
-            switch (status) {
-                case ERROR_CODE_400:
-                    message = ERROR_MESSAGE_400;
-                    break;
-                case ERROR_CODE_401:
-                    message = ERROR_MESSAGE_401;
-                    break;
-                case ERROR_CODE_404:
-                    message = ERROR_MESSAGE_404;
-                    break;
-                case ERROR_CODE_429:
-                    message = ERROR_MESSAGE_429;
-                    break;
-                case ERROR_CODE_500:
-                case ERROR_CODE_503:
-                case ERROR_CODE_504:
-                    message = ERROR_MESSAGE_50_;
-                    break;
-                default:
-                    break;
-            }
+    private void throwExceptionIfRequestFailed(ClientHttpResponse response) throws IOException, MyDevClientException {
+        int code = response.getRawStatusCode();
+        if (code != 200) {
+            String msg = MyDevResponseCodeUtil.getCSODHttpStatusMessage(response.getRawStatusCode(), response.getStatusText());
+            throw new MyDevClientException(code, msg);
         }
-        if (message == null) {
-            message = response.getStatusText();
-        }
-        return message;
     }
 }

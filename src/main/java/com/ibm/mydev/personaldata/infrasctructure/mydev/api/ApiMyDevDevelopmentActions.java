@@ -3,6 +3,7 @@ package com.ibm.mydev.personaldata.infrasctructure.mydev.api;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.ibm.mydev.personaldata.domain.developmentactions.*;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevClientException;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import io.swagger.models.auth.In;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -52,42 +54,52 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
     @Override
     public Set<DevelopmentAction> findBySubjectAndDevelopmentYear(String subject, int developmentYear, String locale) {
 
-        final MyDevUserView userView = myDevApiClient.getUserData(subject);
-        if (!MyDevView.isEmpty(userView)) {
-            final UserItem user = userView.getValue().get(0);
-            if (user != null && user.getId() != null) {
+        try {
+            final MyDevUserView userView = myDevApiClient.getUserData(subject);
+            if (!MyDevView.isEmpty(userView)) {
+                final UserItem user = userView.getValue().get(0);
+                if (user != null && user.getId() != null) {
 
-                final MyDevTranscriptView transcriptView = myDevApiClient.getTranscriptData(user.getId(), developmentYear);
+                    final MyDevTranscriptView transcriptView = myDevApiClient.getTranscriptData(user.getId(), developmentYear);
 
-                if (!MyDevView.isEmpty(transcriptView)) {
+                    if (!MyDevView.isEmpty(transcriptView)) {
 
-                    final List<TranscriptItem> transcripts = transcriptView.getValue();
-                    final List<List<String>> objectIdsChunks = getObjectIdsChunks(transcriptView);
+                        final List<TranscriptItem> transcripts = transcriptView.getValue();
+                        final List<List<String>> objectIdsChunks = getObjectIdsChunks(transcriptView);
 
-                    final CompletableFuture<List<MyDevTrainingLocalView>> trainingLocalFutures =
-                            sequence(getChunkedTrainingLocalFutures(user.getLanguageId(), objectIdsChunks));
-                    final CompletableFuture<List<MyDevTrainingView>> trainingFutures =
-                            sequence(getChunkedTrainingFutures(objectIdsChunks));
+                        final CompletableFuture<List<MyDevTrainingLocalView>> trainingLocalFutures =
+                                sequence(getChunkedTrainingLocalFutures(user.getLanguageId(), objectIdsChunks));
+                        final CompletableFuture<List<MyDevTrainingView>> trainingFutures =
+                                sequence(getChunkedTrainingFutures(objectIdsChunks));
 
-                    List<MyDevTrainingView> myDevTrainingViews = null;
-                    List<MyDevTrainingLocalView> myDevTrainingLocalViews = null;
+                        List<MyDevTrainingView> myDevTrainingViews = null;
+                        List<MyDevTrainingLocalView> myDevTrainingLocalViews = null;
 
-                    try {
-                        myDevTrainingViews = trainingFutures.get();
-                        myDevTrainingLocalViews = trainingLocalFutures.get();
-                    } catch (InterruptedException | ExecutionException e) {
-                        LOGGER.error(e.getMessage());
-                    }
-                    if (myDevTrainingViews != null) {
-                        final List<TrainingItem> trainings = myDevTrainingViews.stream().map(trainingView -> trainingView.getValue()).flatMap(List::stream).collect(Collectors.toList());
-                        List<TrainingLocalItem> trainingLocals = new ArrayList<>();
-                        if (myDevTrainingLocalViews != null) {
-                            trainingLocals = myDevTrainingLocalViews.stream().map(trainingLocalView -> trainingLocalView.getValue()).flatMap(List::stream).collect(Collectors.toList());
+                        try {
+                            myDevTrainingViews = trainingFutures.get();
+                            myDevTrainingLocalViews = trainingLocalFutures.get();
+                        } catch (InterruptedException | ExecutionException e) {
+                            LOGGER.error(e.getMessage());
                         }
-                        return buildDevelopementActions(user, transcripts, trainings, trainingLocals, locale);
+                        if (myDevTrainingViews != null) {
+                            final List<TrainingItem> trainings = myDevTrainingViews.stream().map(trainingView -> trainingView.getValue()).flatMap(List::stream).collect(Collectors.toList());
+                            List<TrainingLocalItem> trainingLocals = new ArrayList<>();
+                            if (myDevTrainingLocalViews != null) {
+                                trainingLocals = myDevTrainingLocalViews.stream().map(trainingLocalView -> trainingLocalView.getValue()).flatMap(List::stream).collect(Collectors.toList());
+                            }
+                            return buildDevelopementActions(user, transcripts, trainings, trainingLocals, locale);
+                        }
                     }
                 }
             }
+        }
+        catch (IOException e) {
+            // todo
+        }
+        catch(MyDevClientException e) {
+            int code = e.getCode();
+            String message = e.getMessage();
+            LOGGER.error("Erreur code : {}, message: {}", code, message);
         }
         return Collections.emptySet();
     }
@@ -312,7 +324,7 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
         );
     }
 
-    private List<CompletableFuture<MyDevTrainingLocalView>> getChunkedTrainingLocalFutures(Integer cultureId, List<List<String>> objectIdsChunks) {
+    private List<CompletableFuture<MyDevTrainingLocalView>> getChunkedTrainingLocalFutures(Integer cultureId, List<List<String>> objectIdsChunks) throws IOException, MyDevClientException {
         return objectIdsChunks
                 .stream()
                 .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())
@@ -320,7 +332,7 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
                 .collect(Collectors.toList());
     }
 
-    private List<CompletableFuture<MyDevTrainingView>> getChunkedTrainingFutures(List<List<String>> objectIdsChunks) {
+    private List<CompletableFuture<MyDevTrainingView>> getChunkedTrainingFutures(List<List<String>> objectIdsChunks) throws IOException, MyDevClientException {
         return objectIdsChunks
                 .stream()
                 .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())

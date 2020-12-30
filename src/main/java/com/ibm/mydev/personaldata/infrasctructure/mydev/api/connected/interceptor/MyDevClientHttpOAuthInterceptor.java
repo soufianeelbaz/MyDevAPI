@@ -1,5 +1,6 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.interceptor;
 
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevClientException;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.MyDevApiClient;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.IMyDevTokenService;
 import org.slf4j.Logger;
@@ -27,7 +28,7 @@ public class MyDevClientHttpOAuthInterceptor implements ClientHttpRequestInterce
 
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body,
-                                        ClientHttpRequestExecution execution) throws IOException {
+                                        ClientHttpRequestExecution execution) throws IOException, MyDevClientException {
         ClientHttpResponse response = execution.execute(request, body);
         if (HttpStatus.UNAUTHORIZED == response.getStatusCode()) {
             tokenService.refreshToken();

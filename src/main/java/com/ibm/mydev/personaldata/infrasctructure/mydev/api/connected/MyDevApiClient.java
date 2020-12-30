@@ -1,6 +1,7 @@
 package com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected;
 
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.IMyDevApiClient;
+import com.ibm.mydev.personaldata.infrasctructure.mydev.api.configuration.MyDevClientException;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.connected.token.MyDevTokenService;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.*;
 import com.ibm.mydev.personaldata.infrasctructure.mydev.api.dto.TrainingItem.TrainingReportAttributes;
@@ -21,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -77,12 +79,12 @@ public class MyDevApiClient implements IMyDevApiClient {
     @Autowired
     public MyDevTokenService tokenService;
 
-    public <T> T query(String url, HttpEntity request, Class<T> clazz) {
+    public <T> T query(String url, HttpEntity request, Class<T> clazz) throws MyDevClientException {
         return restTemplate.exchange(url, HttpMethod.GET, request, clazz).getBody();
     }
 
     @Override
-    public MyDevUserView getUserData(String uid) {
+    public MyDevUserView getUserData(String uid) throws IOException, MyDevClientException  {
         LOGGER.info("Récupération des données utilisateur \"{}\".", uid);
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
@@ -91,7 +93,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     @Override
-    public MyDevTranscriptView getTranscriptData(Integer id, Integer year) {
+    public MyDevTranscriptView getTranscriptData(Integer id, Integer year) throws IOException, MyDevClientException  {
         LOGGER.info("Récupération des données transcript de l'utilisateur {} depuis l'année {}.", id, year);
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
@@ -101,7 +103,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     @Override
-    public MyDevTrainingView getTrainingData(List<String> objectIds) {
+    public MyDevTrainingView getTrainingData(List<String> objectIds) throws IOException, MyDevClientException  {
         LOGGER.info("Récupération de la liste des formations {}.", objectIds);
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
@@ -110,7 +112,7 @@ public class MyDevApiClient implements IMyDevApiClient {
     }
 
     @Override
-    public MyDevTrainingLocalView getTrainingLocalData(Integer cultureId, List<String> objectIds) {
+    public MyDevTrainingLocalView getTrainingLocalData(Integer cultureId, List<String> objectIds) throws IOException, MyDevClientException {
         LOGGER.info("Récupération des traductions pour les formations {}.", objectIds);
         HttpHeaders headers = getHeaders();
         HttpEntity request = new HttpEntity(headers);
@@ -118,7 +120,7 @@ public class MyDevApiClient implements IMyDevApiClient {
         return query(urlWithParams, request, MyDevTrainingLocalView.class);
     }
 
-    private HttpHeaders getHeaders() {
+    private HttpHeaders getHeaders() throws IOException, MyDevClientException  {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.ACCEPT, "application/json");
         headers.set(AUTHORIZATION_KEY, "Bearer " + tokenService.getAccessToken());
