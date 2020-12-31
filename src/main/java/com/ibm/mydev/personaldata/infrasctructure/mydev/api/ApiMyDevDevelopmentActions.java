@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -52,7 +53,7 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
     private int chunkUrlSize;
 
     @Override
-    public Set<DevelopmentAction> findBySubjectAndDevelopmentYear(String subject, int developmentYear, String locale) {
+    public MyDevDevelopmentAction findBySubjectAndDevelopmentYear(String subject, int developmentYear, String locale) {
 
         try {
             final MyDevUserView userView = myDevApiClient.getUserData(subject);
@@ -87,7 +88,9 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
                             if (myDevTrainingLocalViews != null) {
                                 trainingLocals = myDevTrainingLocalViews.stream().map(trainingLocalView -> trainingLocalView.getValue()).flatMap(List::stream).collect(Collectors.toList());
                             }
-                            return buildDevelopementActions(user, transcripts, trainings, trainingLocals, locale);
+                            return new MyDevDevelopmentAction(200, "OK", buildDevelopementActions(user, transcripts, trainings, trainingLocals, locale));
+                        } else {
+                            // todo
                         }
                     }
                 }
@@ -100,8 +103,9 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
             int code = e.getCode();
             String message = e.getMessage();
             LOGGER.error("Erreur code : {}, message: {}", code, message);
+            new MyDevDevelopmentAction(code, message, Sets.newHashSet());
         }
-        return Collections.emptySet();
+        return new MyDevDevelopmentAction(200, "OK", Sets.newHashSet());
     }
 
     private Set<DevelopmentAction> buildDevelopementActions(UserItem user,
@@ -324,11 +328,17 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
         );
     }
 
-    private List<CompletableFuture<MyDevTrainingLocalView>> getChunkedTrainingLocalFutures(Integer cultureId, List<List<String>> objectIdsChunks) throws IOException, MyDevClientException {
+    private List<CompletableFuture<MyDevTrainingLocalView>> getChunkedTrainingLocalFutures(Integer cultureId, List<List<String>> objectIdsChunks) {
         return objectIdsChunks
                 .stream()
                 .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())
-                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> myDevApiClient.getTrainingLocalData(cultureId, objectIdsChunk)))
+                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> {
+                    try {
+                        return myDevApiClient.getTrainingLocalData(cultureId, objectIdsChunk);
+                    } catch (IOException | MyDevClientException e) {
+                        throw new CompletionException(e);
+                    }
+                }))
                 .collect(Collectors.toList());
     }
 
@@ -336,7 +346,13 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
         return objectIdsChunks
                 .stream()
                 .filter(objectIdsChunk -> objectIdsChunk != null && !objectIdsChunk.isEmpty())
-                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> myDevApiClient.getTrainingData(objectIdsChunk)))
+                .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> {
+                    try {
+                        return myDevApiClient.getTrainingData(objectIdsChunk);
+                    } catch (IOException | MyDevClientException e) {
+                        throw new CompletionException(e);
+                    }
+                }))
                 .collect(Collectors.toList());
     }
 }

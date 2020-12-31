@@ -12,6 +12,8 @@ import org.springframework.http.*;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
+
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -31,7 +33,7 @@ public class MyDevTokeServiceLocalItTest {
     }
 
     @Test
-    public void testRefreshToken() {
+    public void testRefreshToken() throws IOException {
 
         ResponseEntity response = getTokenMockedResponse();
 
@@ -59,7 +61,7 @@ public class MyDevTokeServiceLocalItTest {
     }
 
     @Test
-    public void testGetAccessToken() {
+    public void testGetAccessToken() throws IOException {
 
         ResponseEntity response = getTokenMockedResponse();
 

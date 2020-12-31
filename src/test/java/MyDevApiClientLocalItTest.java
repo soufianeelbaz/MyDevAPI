@@ -11,6 +11,7 @@ import org.springframework.http.*;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,7 @@ public class MyDevApiClientLocalItTest {
     }
 
     @Test
-    public void testGetUserData() {
+    public void testGetUserData() throws IOException {
 
         ReflectionTestUtils.setField(sut, "users", "services/api/x/odata/api/views/vw_rpt_user");
 
@@ -81,7 +82,7 @@ public class MyDevApiClientLocalItTest {
     }
 
     @Test
-    public void testGetTranscriptData() {
+    public void testGetTranscriptData() throws IOException {
 
         ReflectionTestUtils.setField(sut, "transcripts", "services/api/x/odata/api/views/vw_rpt_transcript");
 
@@ -118,7 +119,7 @@ public class MyDevApiClientLocalItTest {
     }
 
     @Test
-    public void testGetTrainingData() {
+    public void testGetTrainingData() throws IOException {
 
         ReflectionTestUtils.setField(sut, "trainings", "services/api/x/odata/api/views/vw_rpt_training");
 
@@ -147,7 +148,7 @@ public class MyDevApiClientLocalItTest {
     }
 
     @Test
-    public void testGetTrainingLocalData() {
+    public void testGetTrainingLocalData() throws IOException {
 
         ReflectionTestUtils.setField(sut, "trainingsLocal", "services/api/x/odata/api/views/vw_rpt_training_title_local");
 
