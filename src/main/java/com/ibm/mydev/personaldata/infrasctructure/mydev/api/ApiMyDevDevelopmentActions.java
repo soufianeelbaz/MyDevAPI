@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -54,6 +55,8 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
 
     @Override
     public MyDevDevelopmentAction findBySubjectAndDevelopmentYear(String subject, int developmentYear, String locale) {
+        Integer code;
+        String message;
 
         try {
             final MyDevUserView userView = myDevApiClient.getUserData(subject);
@@ -76,36 +79,38 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
                         List<MyDevTrainingView> myDevTrainingViews = null;
                         List<MyDevTrainingLocalView> myDevTrainingLocalViews = null;
 
-                        try {
-                            myDevTrainingViews = trainingFutures.get();
-                            myDevTrainingLocalViews = trainingLocalFutures.get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            LOGGER.error(e.getMessage());
-                        }
+                         myDevTrainingViews = trainingFutures.get();
+                         myDevTrainingLocalViews = trainingLocalFutures.get();
+
                         if (myDevTrainingViews != null) {
                             final List<TrainingItem> trainings = myDevTrainingViews.stream().map(trainingView -> trainingView.getValue()).flatMap(List::stream).collect(Collectors.toList());
                             List<TrainingLocalItem> trainingLocals = new ArrayList<>();
                             if (myDevTrainingLocalViews != null) {
                                 trainingLocals = myDevTrainingLocalViews.stream().map(trainingLocalView -> trainingLocalView.getValue()).flatMap(List::stream).collect(Collectors.toList());
                             }
-                            return new MyDevDevelopmentAction(200, "OK", buildDevelopementActions(user, transcripts, trainings, trainingLocals, locale));
-                        } else {
-                            // todo
+                            return new MyDevDevelopmentAction(HttpStatus.OK.value(), HttpStatus.OK.name(), buildDevelopementActions(user, transcripts, trainings, trainingLocals, locale));
                         }
                     }
                 }
             }
+        } catch (MyDevClientException e) {
+            code = e.getCode();
+            message = e.getMessage();
+            LOGGER.info("Erreur MyDev code : {}, message : {}", code, message);
+            return new MyDevDevelopmentAction(code, message, Sets.newHashSet());
+        } catch (Exception e) {
+            if (e.getCause() instanceof MyDevClientException) {
+                code = ((MyDevClientException) e.getCause()).getCode();
+                message = ((MyDevClientException) e.getCause()).getMessage();
+                LOGGER.info("Erreur MyDev code : {}, message : {}", code, message);
+            } else {
+                code = HttpStatus.INTERNAL_SERVER_ERROR.value();
+                message = HttpStatus.INTERNAL_SERVER_ERROR.name();
+                LOGGER.info("Erreur lors du traitement : {}", e.getMessage());
+            }
+            return new MyDevDevelopmentAction(code, message, Sets.newHashSet());
         }
-        catch (IOException e) {
-            // todo
-        }
-        catch(MyDevClientException e) {
-            int code = e.getCode();
-            String message = e.getMessage();
-            LOGGER.error("Erreur code : {}, message: {}", code, message);
-            new MyDevDevelopmentAction(code, message, Sets.newHashSet());
-        }
-        return new MyDevDevelopmentAction(200, "OK", Sets.newHashSet());
+        return new MyDevDevelopmentAction(HttpStatus.OK.value(), HttpStatus.OK.name(), Sets.newHashSet());
     }
 
     private Set<DevelopmentAction> buildDevelopementActions(UserItem user,
@@ -335,7 +340,9 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
                 .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> {
                     try {
                         return myDevApiClient.getTrainingLocalData(cultureId, objectIdsChunk);
-                    } catch (IOException | MyDevClientException e) {
+                    } catch (MyDevClientException e) {
+                        throw new MyDevClientException(e.getCode(), e.getMessage());
+                    } catch (Exception e) {
                         throw new CompletionException(e);
                     }
                 }))
@@ -349,7 +356,9 @@ public class ApiMyDevDevelopmentActions implements MyDevDevelopmentActions {
                 .map(objectIdsChunk -> CompletableFuture.supplyAsync(() -> {
                     try {
                         return myDevApiClient.getTrainingData(objectIdsChunk);
-                    } catch (IOException | MyDevClientException e) {
+                    } catch (MyDevClientException e) {
+                        throw new MyDevClientException(e.getCode(), e.getMessage());
+                    } catch (Exception e) {
                         throw new CompletionException(e);
                     }
                 }))
